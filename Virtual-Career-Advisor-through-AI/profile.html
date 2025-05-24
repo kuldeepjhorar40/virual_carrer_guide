@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareerCompass - Profile</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        .profile-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        .profile-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .profile-input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .profile-input:focus {
+            border-color: #10b981;
+            box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.5);
+        }
+        #particles-js {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        .profile-image {
+            width: 128px;
+            height: 128px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid rgba(255, 255, 255, 0.2);
+        }
+        #fileInput {
+            display: none;
+        }
+        .progress-ring__circle {
+            transition: stroke-dashoffset 0.35s;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-indigo-900 via-purple-800 to-pink-700 min-h-screen">
+    <!-- 3D Background Animation -->
+    <div id="particles-js"></div>
+
+    <header class="sticky top-0 z-50 bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg border-b border-white border-opacity-20">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="index.html" class="text-white text-2xl font-bold flex items-center">
+                <i class="fas fa-compass mr-2 text-emerald-400"></i>
+                <span>Virtual Career Advisor</span>
+            </a>
+            <div class="flex items-center space-x-4">
+                <span id="userGreeting" class="text-white hidden"></span>
+                <button id="logoutBtn" class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg text-white transition-colors">
+                    Log Out
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+        <div class="flex flex-col lg:flex-row gap-8">
+            <!-- Left Profile Section -->
+            <div class="lg:w-1/3">
+                <div class="profile-container rounded-2xl p-6 mb-6">
+                    <div class="flex flex-col items-center">
+                        <div class="relative mb-4">
+                            <div id="profileImageContainer" class="w-32 h-32 rounded-full bg-gradient-to-r from-emerald-400 to-blue-500 flex items-center justify-center overflow-hidden">
+                                <i id="defaultProfileIcon" class="fas fa-user text-5xl text-white"></i>
+                                <img id="profileImage" class="profile-image hidden" src="" alt="Profile Image">
+                            </div>
+                            <input type="file" id="fileInput" accept="image/*">
+                            <button id="uploadBtn" class="absolute bottom-0 right-0 bg-emerald-500 hover:bg-emerald-600 text-white rounded-full p-2">
+                                <i class="fas fa-camera"></i>
+                            </button>
+                        </div>
+                        <h2 id="profileUsername" class="text-2xl font-bold text-white mb-1"></h2>
+                        <p id="profileEmail" class="text-white opacity-80 mb-4"></p>
+                        <div class="flex space-x-2">
+                            <span class="bg-emerald-500 bg-opacity-20 text-emerald-400 px-3 py-1 rounded-full text-sm">Member</span>
+                            <span class="bg-blue-500 bg-opacity-20 text-blue-400 px-3 py-1 rounded-full text-sm">Active</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="profile-container rounded-2xl p-6">
+                    <h3 class="text-xl font-bold text-white mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li>
+                            <a href="#" id="quizResultsLink" class="flex items-center text-white hover:text-emerald-400 transition-colors p-2 rounded-lg hover:bg-white hover:bg-opacity-10">
+                                <i class="fas fa-chart-pie mr-3"></i>
+                                Career Assessment Results
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" id="resumeBuilderLink" class="flex items-center text-white hover:text-emerald-400 transition-colors p-2 rounded-lg hover:bg-white hover:bg-opacity-10">
+                                <i class="fas fa-file-alt mr-3"></i>
+                                My Resumes
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" id="savedCareersLink" class="flex items-center text-white hover:text-emerald-400 transition-colors p-2 rounded-lg hover:bg-white hover:bg-opacity-10">
+                                <i class="fas fa-bookmark mr-3"></i>
+                                Saved Careers
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" id="settingsLink" class="flex items-center text-white hover:text-emerald-400 transition-colors p-2 rounded-lg hover:bg-white hover:bg-opacity-10">
+                                <i class="fas fa-cog mr-3"></i>
+                                Account Settings
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Right Content Section -->
+            <div class="lg:w-2/3">
+                <div class="profile-container rounded-2xl p-6 mb-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-white">My Career Progress</h2>
+                        <button id="addGoalBtn" class="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg transition-colors">
+                            <i class="fas fa-plus mr-2"></i> Add Goal
+                        </button>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6" id="goalsContainer">
+                        <!-- Goals will be added here dynamically -->
+                    </div>
+                    
+                    <h3 class="text-xl font-bold text-white mb-4">Recent Activity</h3>
+                    <div class="space-y-3" id="activitiesContainer">
+                        <!-- Activities will be added here dynamically -->
+                    </div>
+                </div>
+
+                <div class="profile-container rounded-2xl p-6">
+                    <h2 class="text-2xl font-bold text-white mb-6">Update Profile</h2>
+                    <form id="updateProfileForm" class="space-y-4">
+                        <div>
+                            <label class="block text-white mb-2">Full Name</label>
+                            <input type="text" id="fullName" class="profile-input w-full px-4 py-2 rounded-lg text-white" placeholder="Enter your full name">
+                        </div>
+                        <div>
+                            <label class="block text-white mb-2">Bio</label>
+                            <textarea id="bio" class="profile-input w-full px-4 py-2 rounded-lg text-white" rows="3" placeholder="Tell us about yourself"></textarea>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-white mb-2">Education Level</label>
+                                <select id="education" class="profile-input w-full px-4 py-2 rounded-lg text-white">
+                                    <option value="">Select education</option>
+                                    <option value="highschool">High School</option>
+                                    <option value="bachelors">Bachelor's Degree</option>
+                                    <option value="masters">Master's Degree</option>
+                                    <option value="phd">PhD</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-white mb-2">Current Role</label>
+                                <input type="text" id="currentRole" class="profile-input w-full px-4 py-2 rounded-lg text-white" placeholder="Student, Developer, etc.">
+                            </div>
+                        </div>
+                        <button type="submit" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white py-3 px-4 rounded-lg transition-colors">
+                            Save Changes
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Add Goal Modal -->
+    <div id="goalModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-gray-800 rounded-xl p-6 w-full max-w-md">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-white">Add New Career Goal</h3>
+                <button id="closeModalBtn" class="text-gray-400 hover:text-white">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="goalForm" class="space-y-4">
+                <div>
+                    <label class="block text-white mb-2">Career Title</label>
+                    <input type="text" id="goalTitle" class="profile-input w-full px-4 py-2 rounded-lg text-white" placeholder="e.g. Software Developer" required>
+                </div>
+                <div>
+                    <label class="block text-white mb-2">Description</label>
+                    <textarea id="goalDescription" class="profile-input w-full px-4 py-2 rounded-lg text-white" rows="3" placeholder="What do you want to achieve?" required></textarea>
+                </div>
+                <div>
+                    <label class="block text-white mb-2">Status</label>
+                    <select id="goalStatus" class="profile-input w-full px-4 py-2 rounded-lg text-white" required>
+                        <option value="planning">Planning</option>
+                        <option value="in-progress">In Progress</option>
+                        <option value="completed">Completed</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-white mb-2">Progress (%)</label>
+                    <input type="range" id="goalProgress" min="0" max="100" value="0" class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer">
+                    <div class="flex justify-between text-xs text-white opacity-60 mt-1">
+                        <span>0%</span>
+                        <span id="progressValue">0%</span>
+                    </div>
+                </div>
+                <button type="submit" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white py-3 px-4 rounded-lg transition-colors">
+                    Save Goal
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Three.js background
+        function initParticles() {
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.getElementById('particles-js').appendChild(renderer.domElement);
+
+            // Create particles
+            const particlesGeometry = new THREE.BufferGeometry();
+            const particlesCount = 500;
+            const posArray = new Float32Array(particlesCount * 3);
+
+            for (let i = 0; i < particlesCount * 3; i++) {
+                posArray[i] = (Math.random() - 0.5) * 10;
+            }
+
+            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+            const particlesMaterial = new THREE.PointsMaterial({
+                size: 0.02,
+                color: 0x10b981,
+                transparent: true,
+                opacity: 0.8,
+                blending: THREE.AdditiveBlending
+            });
+
+            const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+            scene.add(particlesMesh);
+
+            camera.position.z = 5;
+
+            function animate() {
+                requestAnimationFrame(animate);
+                particlesMesh.rotation.x += 0.0005;
+                particlesMesh.rotation.y += 0.0005;
+                renderer.render(scene, camera);
+            }
+
+            animate();
+
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        }
+
+        // Load user data
+        function loadUserData() {
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            if (!user) {
+                window.location.href = 'auth.html';
+                return;
+            }
+
+            document.getElementById('profileUsername').textContent = user.username;
+            document.getElementById('profileEmail').textContent = user.email;
+            document.getElementById('userGreeting').textContent = `Hi, ${user.username}!`;
+            document.getElementById('userGreeting').classList.remove('hidden');
+
+            // Load profile image if exists
+            if (user.profileImage) {
+                document.getElementById('profileImage').src = user.profileImage;
+                document.getElementById('profileImage').classList.remove('hidden');
+                document.getElementById('defaultProfileIcon').classList.add('hidden');
+            }
+
+            // Load additional profile data if exists
+            if (user.profile) {
+                document.getElementById('fullName').value = user.profile.fullName || '';
+                document.getElementById('bio').value = user.profile.bio || '';
+                document.getElementById('education').value = user.profile.education || '';
+                document.getElementById('currentRole').value = user.profile.currentRole || '';
+            }
+
+            // Load goals if exists
+            if (user.goals) {
+                renderGoals(user.goals);
+            } else {
+                // Add default goals if none exist
+                const defaultGoals = [
+                    {
+                        id: Date.now(),
+                        title: "Software Developer",
+                        description: "Master Python and build 3 projects",
+                        status: "in-progress",
+                        progress: 65,
+                        skills: "3/5 Skills",
+                        date: new Date().toISOString()
+                    },
+                    {
+                        id: Date.now() + 1,
+                        title: "Data Analyst",
+                        description: "Learn SQL and Tableau",
+                        status: "planning",
+                        progress: 20,
+                        skills: "1/4 Skills",
+                        date: new Date().toISOString()
+                    }
+                ];
+                user.goals = defaultGoals;
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                renderGoals(defaultGoals);
+            }
+
+            // Load activities if exists
+            if (user.activities) {
+                renderActivities(user.activities);
+            } else {
+                // Add default activities if none exist
+                const defaultActivities = [
+                    {
+                        type: "assessment",
+                        text: "Completed career assessment",
+                        date: "2 days ago",
+                        icon: "check",
+                        color: "emerald"
+                    },
+                    {
+                        type: "resume",
+                        text: "Updated resume for Tech jobs",
+                        date: "1 week ago",
+                        icon: "file-alt",
+                        color: "blue"
+                    }
+                ];
+                user.activities = defaultActivities;
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                renderActivities(defaultActivities);
+            }
+        }
+
+        // Render goals
+        function renderGoals(goals) {
+            const goalsContainer = document.getElementById('goalsContainer');
+            goalsContainer.innerHTML = '';
+
+            goals.forEach(goal => {
+                const statusClass = goal.status === 'in-progress' ? 'bg-emerald-500 bg-opacity-20 text-emerald-400' : 
+                                    goal.status === 'completed' ? 'bg-purple-500 bg-opacity-20 text-purple-400' : 
+                                    'bg-blue-500 bg-opacity-20 text-blue-400';
+                const statusText = goal.status === 'in-progress' ? 'In Progress' : 
+                                 goal.status === 'completed' ? 'Completed' : 'Planning';
+                const progressColor = goal.status === 'in-progress' ? 'bg-emerald-500' : 
+                                    goal.status === 'completed' ? 'bg-purple-500' : 'bg-blue-500';
+
+                const goalElement = document.createElement('div');
+                goalElement.className = 'profile-card rounded-xl p-4';
+                goalElement.innerHTML = `
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-lg font-bold text-white">${goal.title}</h3>
+                        <span class="${statusClass} px-2 py-1 rounded-full text-xs">${statusText}</span>
+                    </div>
+                    <p class="text-white opacity-80 text-sm mb-3">${goal.description}</p>
+                    <div class="w-full bg-gray-700 rounded-full h-2">
+                        <div class="${progressColor} h-2 rounded-full" style="width: ${goal.progress}%"></div>
+                    </div>
+                    <div class="flex justify-between text-xs text-white opacity-60 mt-1">
+                        <span>${goal.progress}% Complete</span>
+                        <span>${goal.skills || ''}</span>
+                    </div>
+                `;
+                goalsContainer.appendChild(goalElement);
+            });
+        }
+
+        // Render activities
+        function renderActivities(activities) {
+            const activitiesContainer = document.getElementById('activitiesContainer');
+            activitiesContainer.innerHTML = '';
+
+            activities.forEach(activity => {
+                const activityElement = document.createElement('div');
+                activityElement.className = 'profile-card rounded-xl p-4 flex items-start';
+                activityElement.innerHTML = `
+                    <div class="bg-${activity.color}-500 bg-opacity-20 text-${activity.color}-400 p-2 rounded-full mr-3">
+                        <i class="fas fa-${activity.icon}"></i>
+                    </div>
+                    <div>
+                        <p class="text-white">${activity.text}</p>
+                        <p class="text-white opacity-60 text-sm">${activity.date}</p>
+                    </div>
+                `;
+                activitiesContainer.appendChild(activityElement);
+            });
+        }
+
+        // Update profile
+        document.getElementById('updateProfileForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            
+            user.profile = {
+                fullName: document.getElementById('fullName').value,
+                bio: document.getElementById('bio').value,
+                education: document.getElementById('education').value,
+                currentRole: document.getElementById('currentRole').value
+            };
+
+            localStorage.setItem('currentUser', JSON.stringify(user));
+            
+            // Show success message
+            const successMsg = document.createElement('div');
+            successMsg.className = 'fixed top-4 right-4 bg-emerald-500 text-white px-4 py-2 rounded-lg shadow-lg flex items-center';
+            successMsg.innerHTML = `
+                <i class="fas fa-check-circle mr-2"></i>
+                Profile updated successfully!
+            `;
+            document.body.appendChild(successMsg);
+            setTimeout(() => {
+                successMsg.remove();
+            }, 3000);
+        });
+
+        // Handle profile image upload
+        document.getElementById('uploadBtn').addEventListener('click', function() {
+            document.getElementById('fileInput').click();
+        });
+
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const user = JSON.parse(localStorage.getItem('currentUser'));
+                    user.profileImage = event.target.result;
+                    localStorage.setItem('currentUser', JSON.stringify(user));
+                    
+                    document.getElementById('profileImage').src = event.target.result;
+                    document.getElementById('profileImage').classList.remove('hidden');
+                    document.getElementById('defaultProfileIcon').classList.add('hidden');
+                    
+                    // Show success message
+                    const successMsg = document.createElement('div');
+                    successMsg.className = 'fixed top-4 right-4 bg-emerald-500 text-white px-4 py-2 rounded-lg shadow-lg flex items-center';
+                    successMsg.innerHTML = `
+                        <i class="fas fa-check-circle mr-2"></i>
+                        Profile image updated!
+                    `;
+                    document.body.appendChild(successMsg);
+                    setTimeout(() => {
+                        successMsg.remove();
+                    }, 3000);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Handle goal modal
+        document.getElementById('addGoalBtn').addEventListener('click', function() {
+            document.getElementById('goalModal').classList.remove('hidden');
+        });
+
+        document.getElementById('closeModalBtn').addEventListener('click', function() {
+            document.getElementById('goalModal').classList.add('hidden');
+        });
+
+        // Update progress value display
+        document.getElementById('goalProgress').addEventListener('input', function() {
+            document.getElementById('progressValue').textContent = this.value + '%';
+        });
+
+        // Handle goal form submission
+        document.getElementById('goalForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            
+            const newGoal = {
+                id: Date.now(),
+                title: document.getElementById('goalTitle').value,
+                description: document.getElementById('goalDescription').value,
+                status: document.getElementById('goalStatus').value,
+                progress: parseInt(document.getElementById('goalProgress').value),
+                skills: "0/0 Skills",
+                date: new Date().toISOString()
+            };
+
+            if (!user.goals) {
+                user.goals = [];
+            }
+            user.goals.push(newGoal);
+            localStorage.setItem('currentUser', JSON.stringify(user));
+            
+            // Add activity
+            const newActivity = {
+                type: "goal",
+                text: `Added new goal: ${newGoal.title}`,
+                date: "Just now",
+                icon: "flag",
+                color: "emerald"
+            };
+            
+            if (!user.activities) {
+                user.activities = [];
+            }
+            user.activities.unshift(newActivity);
+            localStorage.setItem('currentUser', JSON.stringify(user));
+            
+            // Update UI
+            renderGoals(user.goals);
+            renderActivities(user.activities);
+            
+            // Close modal and reset form
+            document.getElementById('goalModal').classList.add('hidden');
+            this.reset();
+            document.getElementById('progressValue').textContent = '0%';
+            
+            // Show success message
+            const successMsg = document.createElement('div');
+            successMsg.className = 'fixed top-4 right-4 bg-emerald-500 text-white px-4 py-2 rounded-lg shadow-lg flex items-center';
+            successMsg.innerHTML = `
+                <i class="fas fa-check-circle mr-2"></i>
+                New goal added successfully!
+            `;
+            document.body.appendChild(successMsg);
+            setTimeout(() => {
+                successMsg.remove();
+            }, 3000);
+        });
+
+        // Handle navigation links
+        document.getElementById('quizResultsLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            alert('Navigating to Career Assessment Results page');
+            // In a real app: window.location.href = 'quiz-results.html';
+        });
+
+        document.getElementById('resumeBuilderLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            alert('Navigating to My Resumes page');
+            // In a real app: window.location.href = 'resume-builder.html';
+        });
+
+        document.getElementById('savedCareersLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            alert('Navigating to Saved Careers page');
+            // In a real app: window.location.href = 'saved-careers.html';
+        });
+
+        document.getElementById('settingsLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            alert('Navigating to Account Settings page');
+            // In a real app: window.location.href = 'settings.html';
+        });
+
+        // Logout
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            localStorage.removeItem('currentUser');
+            window.location.href = 'auth.html';
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            initParticles();
+            loadUserData();
+        });
+    </script>
+</body>
+</html>

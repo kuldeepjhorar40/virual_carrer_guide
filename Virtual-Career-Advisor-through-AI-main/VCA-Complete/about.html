@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About CareerCompass</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .feature-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.1);
+        }
+
+        .gradient-text {
+            background: linear-gradient(45deg, #8b5cf6, #ec4899, #10b981);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .stat-number {
+            background: linear-gradient(45deg, #10b981, #8b5cf6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-indigo-900 via-purple-800 to-pink-700 min-h-screen">
+
+<section class="container mx-auto px-4 py-16">
+    <!-- Main Header -->
+    <div class="text-center mb-20 animate-float">
+        <div class="inline-block bg-emerald-500/20 rounded-full p-6 mb-8">
+            <i class="fas fa-compass text-5xl text-emerald-400"></i>
+        </div>
+        <h1 class="text-4xl md:text-6xl font-bold gradient-text mb-4">
+            Smart Career Navigation
+        </h1>
+        <p class="text-xl text-white/80">
+            AI-Powered • Personalized • Future-Ready
+        </p>
+    </div>
+
+    <!-- Core Features Grid -->
+    <div class="grid md:grid-cols-3 gap-8 mb-24">
+        <div class="feature-card p-8 rounded-3xl text-center">
+            <div class="text-emerald-400 text-4xl mb-6">
+                <i class="fas fa-brain"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-white mb-4">AI Analysis</h3>
+            <p class="text-white/80">50+ career factors evaluated</p>
+        </div>
+
+        <div class="feature-card p-8 rounded-3xl text-center">
+            <div class="text-purple-400 text-4xl mb-6">
+                <i class="fas fa-route"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-white mb-4">Custom Roadmaps</h3>
+            <p class="text-white/80">Step-by-step career planning</p>
+        </div>
+
+        <div class="feature-card p-8 rounded-3xl text-center">
+            <div class="text-pink-400 text-4xl mb-6">
+                <i class="fas fa-chart-line"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-white mb-4">Real-time Insights</h3>
+            <p class="text-white/80">Market trends analysis</p>
+        </div>
+    </div>
+
+    <!-- Visual Stats -->
+    <div class="grid md:grid-cols-3 gap-6 text-center mb-24">
+        <div class="glass-panel p-8 rounded-3xl">
+            <div class="stat-number text-5xl font-bold mb-2">98%</div>
+            <div class="text-white/80">Accuracy Rate</div>
+        </div>
+        <div class="glass-panel p-8 rounded-3xl">
+            <div class="stat-number text-5xl font-bold mb-2">24/7</div>
+            <div class="text-white/80">Support</div>
+        </div>
+        <div class="glass-panel p-8 rounded-3xl">
+            <div class="stat-number text-5xl font-bold mb-2">50K+</div>
+            <div class="text-white/80">Users</div>
+        </div>
+    </div>
+
+    <!-- Team Preview -->
+    <div class="text-center">
+        <h2 class="text-3xl font-bold text-white mb-12">Trusted By Professionals</h2>
+        <div class="flex justify-center space-x-6 mb-8">
+            <div class="w-16 h-16 rounded-full border-2 border-emerald-400 overflow-hidden">
+                <img src="user1.jpg" alt="User" class="w-full h-full object-cover">
+            </div>
+            <div class="w-16 h-16 rounded-full border-2 border-purple-400 overflow-hidden">
+                <img src="user2.jpg" alt="User" class="w-full h-full object-cover">
+            </div>
+            <div class="w-16 h-16 rounded-full border-2 border-pink-400 overflow-hidden">
+                <img src="user3.jpg" alt="User" class="w-full h-full object-cover">
+            </div>
+        </div>
+        <p class="text-white/80">Join 50,000+ professionals advancing their careers</p>
+    </div>
+</section>
+
+<script>
+    // Simple animation trigger
+    document.addEventListener('DOMContentLoaded', () => {
+        const features = document.querySelectorAll('.feature-card');
+        
+        features.forEach((feature, index) => {
+            setTimeout(() => {
+                feature.style.opacity = '1';
+                feature.style.transform = 'translateY(0)';
+            }, index * 200);
+        });
+    });
+</script>
+
+</body>
+</html>

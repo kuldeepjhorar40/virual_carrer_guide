@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual Career Advisor</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #8a2be2;
+            --secondary: #9370db;
+            --accent: #00cec9;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --success: #00b894;
+            --warning: #fdcb6e;
+            --danger: #d63031;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: var(--light);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* 3D Card Effects */
+        .card-3d {
+            transform-style: preserve-3d;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            perspective: 1000px;
+            transform: translateZ(0);
+        }
+
+        .card-3d:hover {
+            transform: translateY(-10px) rotateX(5deg) rotateY(5deg);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Glow Effects */
+        .glow {
+            animation: glow-pulse 4s infinite alternate;
+        }
+
+        @keyframes glow-pulse {
+            0% {
+                box-shadow: 0 0 10px rgba(138, 43, 226, 0.5);
+            }
+            100% {
+                box-shadow: 0 0 30px rgba(138, 43, 226, 0.8);
+            }
+        }
+
+        /* Floating Animation */
+        .floating {
+            animation: floating 6s ease-in-out infinite;
+        }
+
+        @keyframes floating {
+            0%, 100% {
+                transform: translateY(0) rotateX(0) rotateY(0);
+            }
+            50% {
+                transform: translateY(-20px) rotateX(5deg) rotateY(5deg);
+            }
+        }
+
+        /* Gradient Text */
+        .gradient-text {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        /* Form Inputs */
+        .form-input {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(138, 43, 226, 0.3);
+        }
+
+        /* Percentage Bars */
+        .percentage-fill {
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            height: 100%;
+            border-radius: 9999px;
+            transition: width 1.5s cubic-bezier(0.65, 0, 0.35, 1);
+        }
+
+        /* Particle Background */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        /* Advanced Spinner */
+        .advanced-spinner {
+            width: 70px;
+            height: 70px;
+            border: 5px solid rgba(138, 43, 226, 0.2);
+            border-top-color: var(--primary);
+            border-bottom-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 1.5s linear infinite, colors 4s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes colors {
+            0% { border-top-color: var(--primary); border-bottom-color: var(--accent); }
+            50% { border-top-color: var(--accent); border-bottom-color: var(--primary); }
+            100% { border-top-color: var(--primary); border-bottom-color: var(--accent); }
+        }
+
+        /* Holographic Effect */
+        .holographic {
+            background: linear-gradient(135deg, 
+                rgba(138, 43, 226, 0.1) 0%, 
+                rgba(147, 112, 219, 0.1) 50%, 
+                rgba(0, 206, 201, 0.1) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .holographic::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0) 45%,
+                rgba(255, 255, 255, 0.3) 50%,
+                rgba(255, 255, 255, 0) 55%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            transform: rotate(30deg);
+            animation: holographic 3s infinite linear;
+        }
+
+        @keyframes holographic {
+            from { transform: translateX(-100%) rotate(30deg); }
+            to { transform: translateX(100%) rotate(30deg); }
+        }
+    </style>
+</head>
+<body class="relative">
+    <!-- Particle Background -->
+    <div class="particles" id="particles"></div>
+
+    <div class="container mx-auto px-4 py-8 max-w-6xl relative z-10">
+        <!-- Header with 3D Holographic Effect -->
+        <div class="header bg-gradient-to-br from-purple-900/80 to-indigo-900/80 text-white rounded-2xl p-8 mb-8 shadow-2xl glow floating holographic">
+            <h1 class="text-5xl font-bold mb-4 flex items-center justify-center">
+                <i class="fas fa-user-tie mr-4 text-cyan-300"></i>
+                <span class="gradient-text">Virtual Career Advisor</span>
+            </h1>
+            <p class="text-xl opacity-90 text-center text-cyan-100">Discover your ideal career path in our cosmic universe of opportunities</p>
+        </div>
+
+        <!-- Form Container with 3D Glass Morphism -->
+        <div class="form-container mb-12">
+            <div class="card-3d bg-gradient-to-br from-purple-900/40 to-indigo-900/40 backdrop-blur-lg rounded-2xl shadow-xl overflow-hidden border border-white/10">
+                <form id="careerForm" class="p-8">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <!-- Left Column -->
+                        <div class="space-y-6">
+                            <div class="form-group">
+                                <label for="age" class="block text-cyan-100 font-medium mb-2 text-lg">Age:</label>
+                                <input type="number" id="age" name="age" min="18" max="70" required 
+                                       class="form-input w-full px-5 py-4 rounded-xl text-white placeholder-gray-400">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="education" class="block text-cyan-100 font-medium mb-2 text-lg">Education Level:</label>
+                                <select id="education" name="education" required 
+                                        class="form-input w-full px-5 py-4 rounded-xl text-white">
+                                    <option value="" class="text-gray-800">Select Education Level</option>
+                                    <option value="Diploma" class="text-gray-800">Diploma</option>
+                                    <option value="Associate Degree" class="text-gray-800">Associate Degree</option>
+                                    <option value="Bachelor's in CS" class="text-gray-800">Bachelor's in Computer Science</option>
+                                    <option value="Bachelor's in IT" class="text-gray-800">Bachelor's in IT</option>
+                                    <option value="Bachelor's in Cybersecurity" class="text-gray-800">Bachelor's in Cybersecurity</option>
+                                    <option value="Bachelor's in Business" class="text-gray-800">Bachelor's in Business</option>
+                                    <option value="Bachelor's in Psychology" class="text-gray-800">Bachelor's in Psychology</option>
+                                    <option value="Master's in Data Science" class="text-gray-800">Master's in Data Science</option>
+                                    <option value="Master's in IT" class="text-gray-800">Master's in IT</option>
+                                    <option value="Master's in Finance" class="text-gray-800">Master's in Finance</option>
+                                    <option value="PhD in AI" class="text-gray-800">PhD in AI</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="skills" class="block text-cyan-100 font-medium mb-2 text-lg">Skills (comma separated):</label>
+                                <textarea id="skills" name="skills" placeholder="e.g., Python, Java, Communication" required 
+                                          class="form-input w-full px-5 py-4 rounded-xl text-white placeholder-gray-400 min-h-[120px]"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Right Column -->
+                        <div class="space-y-6">
+                            <div class="form-group">
+                                <label for="interests" class="block text-cyan-100 font-medium mb-2 text-lg">Interests (comma separated):</label>
+                                <textarea id="interests" name="interests" placeholder="e.g., Problem-Solving, AI, Helping Others" required 
+                                          class="form-input w-full px-5 py-4 rounded-xl text-white placeholder-gray-400 min-h-[120px]"></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="personality" class="block text-cyan-100 font-medium mb-2 text-lg">Personality Type:</label>
+                                <select id="personality" name="personality" required 
+                                        class="form-input w-full px-5 py-4 rounded-xl text-white">
+                                    <option value="" class="text-gray-800">Select Personality Type</option>
+                                    <option value="ISTJ" class="text-gray-800">ISTJ - The Inspector</option>
+                                    <option value="ISFJ" class="text-gray-800">ISFJ - The Protector</option>
+                                    <option value="INFJ" class="text-gray-800">INFJ - The Counselor</option>
+                                    <option value="INTJ" class="text-gray-800">INTJ - The Mastermind</option>
+                                    <option value="ISTP" class="text-gray-800">ISTP - The Craftsman</option>
+                                    <option value="ISFP" class="text-gray-800">ISFP - The Composer</option>
+                                    <option value="INFP" class="text-gray-800">INFP - The Healer</option>
+                                    <option value="INTP" class="text-gray-800">INTP - The Architect</option>
+                                    <option value="ESTP" class="text-gray-800">ESTP - The Dynamo</option>
+                                    <option value="ESFP" class="text-gray-800">ESFP - The Performer</option>
+                                    <option value="ENFP" class="text-gray-800">ENFP - The Champion</option>
+                                    <option value="ENTP" class="text-gray-800">ENTP - The Visionary</option>
+                                    <option value="ESTJ" class="text-gray-800">ESTJ - The Supervisor</option>
+                                    <option value="ESFJ" class="text-gray-800">ESFJ - The Provider</option>
+                                    <option value="ENFJ" class="text-gray-800">ENFJ - The Teacher</option>
+                                    <option value="ENTJ" class="text-gray-800">ENTJ - The Commander</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="experience" class="block text-cyan-100 font-medium mb-2 text-lg">Work Experience (Years):</label>
+                                <input type="number" id="experience" name="experience" min="0" max="50" required 
+                                       class="form-input w-full px-5 py-4 rounded-xl text-white placeholder-gray-400">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="workStyle" class="block text-cyan-100 font-medium mb-2 text-lg">Preferred Work Style:</label>
+                                <select id="workStyle" name="workStyle" required 
+                                        class="form-input w-full px-5 py-4 rounded-xl text-white">
+                                    <option value="" class="text-gray-800">Select Work Style</option>
+                                    <option value="Independent" class="text-gray-800">Independent</option>
+                                    <option value="Team-Oriented" class="text-gray-800">Team-Oriented</option>
+                                    <option value="Detail-Oriented" class="text-gray-800">Detail-Oriented</option>
+                                    <option value="Analytical" class="text-gray-800">Analytical</option>
+                                    <option value="Creative" class="text-gray-800">Creative</option>
+                                    <option value="Innovative" class="text-gray-800">Innovative</option>
+                                    <option value="Structured" class="text-gray-800">Structured</option>
+                                    <option value="Fast-Paced" class="text-gray-800">Fast-Paced</option>
+                                    <option value="Freelance" class="text-gray-800">Freelance</option>
+                                    <option value="Hands-On" class="text-gray-800">Hands-On</option>
+                                    <option value="People-Oriented" class="text-gray-800">People-Oriented</option>
+                                    <option value="Empathetic" class="text-gray-800">Empathetic</option>
+                                    <option value="Logical" class="text-gray-800">Logical</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="submitBtn" 
+                            class="mt-10 w-full max-w-md mx-auto px-8 py-5 bg-gradient-to-r from-purple-600 to-cyan-500 text-white font-bold rounded-xl shadow-lg hover:shadow-xl hover:from-purple-700 hover:to-cyan-600 transition-all duration-500 transform hover:-translate-y-1 hover:scale-105 flex items-center justify-center glow">
+                        <span class="mr-3">Get Cosmic Career Recommendations</span>
+                        <i class="fas fa-rocket"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Loading Animation with Advanced 3D Effects -->
+        <div id="loading" class="hidden">
+            <div class="max-w-md mx-auto bg-gradient-to-br from-purple-900/50 to-indigo-900/50 backdrop-blur-lg rounded-2xl shadow-2xl p-10 text-center card-3d border border-cyan-400/30 floating">
+                <div class="advanced-spinner mb-8 mx-auto"></div>
+                <h3 class="text-3xl font-bold text-cyan-300 mb-4">Analyzing Your Cosmic Profile</h3>
+                <p class="text-cyan-100 mb-6">We're aligning your skills with the universe's opportunities...</p>
+                <div class="relative h-3 bg-gray-800/50 rounded-full overflow-hidden">
+                    <div class="absolute top-0 left-0 h-full w-0 bg-gradient-to-r from-purple-500 to-cyan-400 rounded-full progress-bar"></div>
+                </div>
+                <div class="mt-4 flex justify-between text-cyan-100 text-sm">
+                    <span>Scanning Dimensions</span>
+                    <span class="percentage-text">0%</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Container with Holographic 3D Effects -->
+        <div id="results" class="hidden">
+            <div class="bg-gradient-to-br from-purple-900/40 to-indigo-900/40 backdrop-blur-lg rounded-2xl shadow-2xl overflow-hidden p-10 card-3d border border-cyan-400/20">
+                <h2 class="text-4xl font-bold text-center mb-10 gradient-text floating">
+                    <i class="fas fa-star mr-3"></i>
+                    Your Cosmic Career Matches
+                    <i class="fas fa-star ml-3"></i>
+                </h2>
+                
+                <!-- Main Recommendation with Holographic Effect -->
+                <div class="main-recommendation mb-14">
+                    <div class="career-card bg-gradient-to-br from-purple-900/60 to-indigo-900/60 border-2 border-cyan-400/30 rounded-xl p-8 shadow-2xl card-3d holographic">
+                        <div class="flex items-center mb-6">
+                            <div class="mr-5 bg-cyan-400/20 p-4 rounded-full glow">
+                                <i class="fas fa-crown text-cyan-300 text-3xl"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-cyan-300">Best Cosmic Match</h3>
+                        </div>
+                        <div class="career-info pl-16">
+                            <h4 id="primaryCareer" class="text-3xl font-bold text-white mb-3">Quantum Software Engineer</h4>
+                            <p id="primaryDescription" class="text-cyan-100 mb-8 text-lg">Develops next-generation quantum computing applications and algorithms that transcend classical computing limitations.</p>
+                        </div>
+                        <div class="match-percentage">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-lg font-medium text-cyan-200">Cosmic Alignment</span>
+                                <span id="primaryMatch" class="text-2xl font-bold text-cyan-300">94% Match</span>
+                            </div>
+                            <div class="relative h-4 bg-gray-800/50 rounded-full overflow-hidden">
+                                <div class="percentage-fill h-full rounded-full" id="primaryPercentage"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Alternative Recommendations Grid -->
+                <div class="alternative-recommendations">
+                    <h3 class="text-3xl font-bold text-center mb-10 gradient-text">
+                        <i class="fas fa-satellite-dish mr-3"></i>
+                        Stellar Alternative Paths
+                        <i class="fas fa-satellite-dish ml-3"></i>
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Card 1 -->
+                        <div class="career-card bg-gradient-to-br from-purple-900/40 to-indigo-900/40 border border-cyan-400/20 rounded-xl p-6 shadow-lg card-3d hover:border-cyan-400/50 transition-all duration-300">
+                            <h4 id="altCareer1" class="text-2xl font-bold text-cyan-300 mb-4">Galactic Data Scientist</h4>
+                            <p id="altDesc1" class="text-cyan-100 mb-6">Analyzes cosmic-scale datasets to uncover universal patterns and predict celestial phenomena.</p>
+                            <div class="match-percentage">
+                                <span id="altMatch1" class="inline-block px-4 py-2 bg-cyan-400/20 text-cyan-300 rounded-full text-lg font-medium glow">88% Match</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Card 2 -->
+                        <div class="career-card bg-gradient-to-br from-purple-900/40 to-indigo-900/40 border border-cyan-400/20 rounded-xl p-6 shadow-lg card-3d hover:border-cyan-400/50 transition-all duration-300">
+                            <h4 id="altCareer2" class="text-2xl font-bold text-cyan-300 mb-4">Interstellar Security Architect</h4>
+                            <p id="altDesc2" class="text-cyan-100 mb-6">Designs security systems for space colonies and protects interplanetary networks from alien threats.</p>
+                            <div class="match-percentage">
+                                <span id="altMatch2" class="inline-block px-4 py-2 bg-cyan-400/20 text-cyan-300 rounded-full text-lg font-medium glow">82% Match</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Card 3 -->
+                        <div class="career-card bg-gradient-to-br from-purple-900/40 to-indigo-900/40 border border-cyan-400/20 rounded-xl p-6 shadow-lg card-3d hover:border-cyan-400/50 transition-all duration-300">
+                            <h4 id="altCareer3" class="text-2xl font-bold text-cyan-300 mb-4">AI Singularity Engineer</h4>
+                            <p id="altDesc3" class="text-cyan-100 mb-6">Develops artificial superintelligence systems that approach technological singularity.</p>
+                            <div class="match-percentage">
+                                <span id="altMatch3" class="inline-block px-4 py-2 bg-cyan-400/20 text-cyan-300 rounded-full text-lg font-medium glow">79% Match</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Card 4 -->
+                        <div class="career-card bg-gradient-to-br from-purple-900/40 to-indigo-900/40 border border-cyan-400/20 rounded-xl p-6 shadow-lg card-3d hover:border-cyan-400/50 transition-all duration-300">
+                            <h4 id="altCareer4" class="text-2xl font-bold text-cyan-300 mb-4">Neural Interface Designer</h4>
+                            <p id="altDesc4" class="text-cyan-100 mb-6">Creates brain-computer interfaces that merge human consciousness with digital systems.</p>
+                            <div class="match-percentage">
+                                <span id="altMatch4" class="inline-block px-4 py-2 bg-cyan-400/20 text-cyan-300 rounded-full text-lg font-medium glow">76% Match</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Card 5 -->
+                        <div class="career-card bg-gradient-to-br from-purple-900/40 to-indigo-900/40 border border-cyan-400/20 rounded-xl p-6 shadow-lg card-3d hover:border-cyan-400/50 transition-all duration-300">
+                            <h4 id="altCareer5" class="text-2xl font-bold text-cyan-300 mb-4">Metaverse Architect</h4>
+                            <p id="altDesc5" class="text-cyan-100 mb-6">Designs immersive virtual worlds that blend reality with digital dimensions.</p>
+                            <div class="match-percentage">
+                                <span id="altMatch5" class="inline-block px-4 py-2 bg-cyan-400/20 text-cyan-300 rounded-full text-lg font-medium glow">72% Match</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Try Again Button -->
+                <button id="tryAgainBtn" 
+                        class="mt-14 w-full max-w-md mx-auto px-8 py-5 bg-gradient-to-r from-cyan-500 to-emerald-500 text-white font-bold rounded-xl shadow-lg hover:shadow-xl hover:from-cyan-600 hover:to-emerald-600 transition-all duration-500 transform hover:-translate-y-1 hover:scale-105 flex items-center justify-center glow">
+                    <span class="mr-3">Explore Another Cosmic Path</span>
+                    <i class="fas fa-redo"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Create particle background
+        function createParticles() {
+            const container = document.getElementById('particles');
+            const particleCount = window.innerWidth < 768 ? 30 : 80;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // Random size between 1px and 3px
+                const size = Math.random() * 2 + 1;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                // Random position
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+                
+                // Random opacity
+                particle.style.opacity = Math.random() * 0.5 + 0.1;
+                
+                // Animation
+                const duration = Math.random() * 20 + 10;
+                particle.style.animation = `float ${duration}s infinite ease-in-out`;
+                particle.style.animationDelay = `${Math.random() * 5}s`;
+                
+                container.appendChild(particle);
+            }
+        }
+
+        // Enhanced form submission with loading animation
+        document.getElementById('careerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Show loading animation
+            document.getElementById('loading').classList.remove('hidden');
+            document.getElementById('careerForm').classList.add('hidden');
+            
+            // Create particles if not already created
+            if (document.querySelectorAll('.particle').length === 0) {
+                createParticles();
+            }
+            
+            // Simulate processing with progress animation
+            const progressBar = document.querySelector('.progress-bar');
+            const percentageText = document.querySelector('.percentage-text');
+            let width = 0;
+            
+            const interval = setInterval(() => {
+                width += 2;
+                progressBar.style.width = width + '%';
+                percentageText.textContent = width + '%';
+                
+                if (width >= 100) {
+                    clearInterval(interval);
+                    
+                    // Hide loading and show results with animation
+                    setTimeout(() => {
+                        document.getElementById('loading').classList.add('hidden');
+                        document.getElementById('results').classList.remove('hidden');
+                        
+                        // Animate percentage bars
+                        document.querySelectorAll('.percentage-fill').forEach((bar, index) => {
+                            const targetWidth = [94, 88, 82, 79, 76, 72][index];
+                            setTimeout(() => {
+                                bar.style.width = targetWidth + '%';
+                            }, index * 200);
+                        });
+                        
+                        // Scroll to results smoothly
+                        window.scrollTo({
+                            top: document.getElementById('results').offsetTop - 50,
+                            behavior: 'smooth'
+                        });
+                    }, 800);
+                }
+            }, 50);
+        });
+        
+        // Try again button
+        document.getElementById('tryAgainBtn').addEventListener('click', function() {
+            document.getElementById('results').classList.add('hidden');
+            document.getElementById('careerForm').classList.remove('hidden');
+            document.getElementById('careerForm').reset();
+            
+            // Scroll to top smoothly
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Initialize particles on load
+        window.addEventListener('load', createParticles);
+    </script>
+</body>
+</html>

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Support - Virtual Career Advisor</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .glow-effect {
+            animation: glow 2s infinite alternate;
+        }
+        @keyframes glow {
+            from {
+                filter: drop-shadow(0 0 5px rgba(16, 185, 129, 0.5));
+            }
+            to {
+                filter: drop-shadow(0 0 15px rgba(16, 185, 129, 0.8));
+            }
+        }
+        .community-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            transition: transform 0.3s ease;
+        }
+        .community-card:hover {
+            transform: translateY(-5px);
+        }
+        .advisor-container {
+            perspective: 1000px;
+            transform-style: preserve-3d;
+            animation: float 6s infinite ease-in-out;
+        }
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotateY(0);
+            }
+            50% {
+                transform: translateY(-20px) rotateY(10deg);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-indigo-900 via-purple-800 to-pink-700 min-h-screen">
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg border-b border-white border-opacity-20">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="index.html" class="text-white text-2xl font-bold flex items-center">
+                <i class="fas fa-compass mr-2 text-emerald-400"></i>
+                <span>Virtual Career Advisor</span>
+            </a>
+            <nav class="hidden md:flex space-x-8">
+                <a href="#community" class="text-white hover:text-emerald-400 transition-colors">Community</a>
+                <a href="#advisor" class="text-white hover:text-emerald-400 transition-colors">Virtual Advisor</a>
+                <a href="#resources" class="text-white hover:text-emerald-400 transition-colors">Resources</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8 relative z-10">
+        <!-- Community Support Section -->
+        <section class="my-16" id="community">
+            <div class="bg-white bg-opacity-10 backdrop-filter backdrop-blur-md rounded-2xl p-8">
+                <h2 class="text-3xl font-bold text-white mb-8 text-center">Community Support</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="community-card">
+                        <h3 class="text-xl font-bold text-white mb-4">Ask Questions</h3>
+                        <p class="text-white mb-4">Connect with experts and get answers to your career-related questions.</p>
+                        <button onclick="openCommunity('ask')" class="w-full p-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors">
+                            Ask Now
+                        </button>
+                    </div>
+                    <div class="community-card">
+                        <h3 class="text-xl font-bold text-white mb-4">Share Resources</h3>
+                        <p class="text-white mb-4">Upload and share useful resources like resume templates, guides, and more.</p>
+                        <button onclick="openCommunity('share')" class="w-full p-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors">
+                            Share Now
+                        </button>
+                    </div>
+                    <div class="community-card">
+                        <h3 class="text-xl font-bold text-white mb-4">Join Discussions</h3>
+                        <p class="text-white mb-4">Participate in community discussions and network with peers.</p>
+                        <button onclick="openCommunity('discuss')" class="w-full p-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors">
+                            Join Now
+                        </button>
+                    </div>
+                </div>
+                <div id="community-container" class="mt-6">
+                    <!-- Community posts and discussions will be dynamically inserted here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Virtual Career Advisor Section -->
+        <section class="my-16" id="advisor">
+            <div class="bg-white bg-opacity-10 backdrop-filter backdrop-blur-md rounded-2xl p-8">
+                <h2 class="text-3xl font-bold text-white mb-8 text-center">Virtual Career Advisor</h2>
+                <div class="flex flex-col md:flex-row justify-center items-center gap-8">
+                    <div class="advisor-container glow-effect">
+                        <img src="https://play-lh.googleusercontent.com/ccL0_ga4nNG-N6CU-UoCLzRbywq7JdOM5_IfQJAhheDjfwWitdVapZ2IFpr6RWUT-g" alt="Virtual Advisor" class="w-48 h-48">
+                    </div>
+                    <div class="text-white max-w-md">
+                        <h3 class="text-2xl font-bold mb-4">Get Personalized Career Advice</h3>
+                        <p class="mb-4">Our AI-powered virtual advisor is here to guide you through your career journey. Ask questions, get recommendations, and explore opportunities.</p>
+                        <button onclick="startChat()" class="w-full p-3 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors">
+                            <i class="fas fa-comments mr-2"></i>Start Chat
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Resources Section -->
+        <section class="my-16" id="resources">
+            <div class="bg-white bg-opacity-10 backdrop-filter backdrop-blur-md rounded-2xl p-8">
+                <h2 class="text-3xl font-bold text-white mb-8 text-center">Career Resources</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="community-card">
+                        <h3 class="text-xl font-bold text-white mb-4">Resume Templates</h3>
+                        <p class="text-white mb-4">Download professionally designed resume templates tailored to your industry.</p>
+                        <button onclick="openResource('resume')" class="w-full p-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors">
+                            Download
+                        </button>
+                    </div>
+                    <div class="community-card">
+                        <h3 class="text-xl font-bold text-white mb-4">Interview Guides</h3>
+                        <p class="text-white mb-4">Access comprehensive guides to ace your next job interview.</p>
+                        <button onclick="openResource('interview')" class="w-full p-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors">
+                            Read More
+                        </button>
+                    </div>
+                    <div class="community-card">
+                        <h3 class="text-xl font-bold text-white mb-4">Skill Development</h3>
+                        <p class="text-white mb-4">Explore courses and resources to upskill and stay competitive.</p>
+                        <button onclick="openResource('skills')" class="w-full p-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors">
+                            Explore
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Function to Open Community Feature
+        function openCommunity(feature) {
+            const container = document.getElementById('community-container');
+            container.innerHTML = `
+                <div class="bg-white bg-opacity-10 backdrop-filter backdrop-blur-md rounded-lg p-4 text-white">
+                    <h3 class="text-xl font-bold mb-2">Community Feature</h3>
+                    <p>You are now accessing the ${feature} feature. Stay tuned for updates!</p>
+                </div>
+            `;
+        }
+
+        // Function to Start Chat with Virtual Advisor
+        function startChat() {
+            alert("Starting chat with Virtual Career Advisor...");
+            // Redirect to a chat interface or open a new window
+            window.open("#", "_blank");
+        }
+
+        // Function to Open Resources
+        function openResource(type) {
+            alert(`Opening ${type} resources...`);
+            // Redirect to resource pages
+            switch (type) {
+                case 'resume':
+                    window.open("https://www.overleaf.com/latex/templates/tagged/cv", "_blank");
+                    break;
+                case 'interview':
+                    window.open("https://www.themuse.com/advice/interviewing", "_blank");
+                    break;
+                case 'skills':
+                    window.open("https://www.coursera.org/", "_blank");
+                    break;
+            }
+        }
+    </script>
+</body>
+</html>

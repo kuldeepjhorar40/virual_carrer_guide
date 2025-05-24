@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Optimization - CareerCompass</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .search-container {
+            perspective: 1000px;
+        }
+        .glow-effect {
+            animation: glow 2s infinite alternate;
+        }
+        @keyframes glow {
+            from {
+                filter: drop-shadow(0 0 5px rgba(16, 185, 129, 0.5));
+            }
+            to {
+                filter: drop-shadow(0 0 15px rgba(16, 185, 129, 0.8));
+            }
+        }
+        #optimization-container, #resume-analysis-container, #resume-builder-container {
+            height: auto;
+            position: relative;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            overflow: hidden;
+            padding: 20px;
+        }
+        .custom-select {
+            appearance: none;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 0.75rem 2.5rem 0.75rem 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+        }
+        .custom-select:focus {
+            outline: none;
+            border-color: #10b981;
+            box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+        }
+        .custom-select option {
+            background-color: #1e293b;
+            color: white;
+        }
+        .template-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            transition: transform 0.3s ease;
+        }
+        .template-card:hover {
+            transform: translateY(-5px);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-indigo-900 via-purple-800 to-pink-700 min-h-screen">
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg border-b border-white border-opacity-20">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="index.html" class="text-white text-2xl font-bold flex items-center">
+                <i class="fas fa-compass mr-2 text-emerald-400"></i>
+                <span>Virtual Career Advisor</span>
+            </a>
+            <nav class="hidden md:flex space-x-8">
+                <a href="#search" class="text-white hover:text-emerald-400 transition-colors">Search</a>
+                <a href="#resume-analysis" class="text-white hover:text-emerald-400 transition-colors">Resume Analysis</a>
+                <a href="#resume-builder" class="text-white hover:text-emerald-400 transition-colors">Resume Builder</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8 relative z-10">
+        <!-- Search Section -->
+        <section class="my-16" id="search">
+            <div class="bg-white bg-opacity-10 backdrop-filter backdrop-blur-md rounded-2xl p-8">
+                <h2 class="text-3xl font-bold text-white mb-8 text-center">Resume Optimization</h2>
+                <div class="flex flex-col md:flex-row justify-center items-center gap-4">
+                    <select id="industry-select" class="custom-select w-full md:w-1/2">
+                        <option value="" disabled selected>Select an industry...</option>
+                        <option value="Technology">Technology</option>
+                        <option value="Healthcare">Healthcare</option>
+                        <option value="Finance">Finance</option>
+                        <option value="Education">Education</option>
+                        <option value="Manufacturing">Manufacturing</option>
+                    </select>
+                    <button id="search-btn" class="w-full md:w-auto p-3 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors">
+                        <i class="fas fa-search mr-2"></i>Optimize Resume
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Optimization Tips Section -->
+        <section class="my-16" id="optimization">
+            <div class="bg-white bg-opacity-10 backdrop-filter backdrop-blur-md rounded-2xl p-8">
+                <h2 class="text-3xl font-bold text-white mb-8 text-center">Optimization Tips</h2>
+                <div id="optimization-container">
+                    <!-- Optimization tips will be dynamically inserted here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Resume Analysis Section -->
+        <section class="my-16" id="resume-analysis">
+            <div class="bg-white bg-opacity-10 backdrop-filter backdrop-blur-md rounded-2xl p-8">
+                <h2 class="text-3xl font-bold text-white mb-8 text-center">Resume Analysis</h2>
+                <div class="flex flex-col md:flex-row justify-center items-center gap-4">
+                    <input type="file" id="resume-upload" class="custom-select w-full md:w-1/2" accept=".pdf,.doc,.docx">
+                    <button id="analyze-btn" class="w-full md:w-auto p-3 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors">
+                        <i class="fas fa-upload mr-2"></i>Analyze Resume
+                    </button>
+                </div>
+                <div id="resume-analysis-container" class="mt-6">
+                    <!-- Resume analysis feedback will be dynamically inserted here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Resume Builder Section -->
+        <section class="my-16" id="resume-builder">
+            <div class="bg-white bg-opacity-10 backdrop-filter backdrop-blur-md rounded-2xl p-8">
+                <h2 class="text-3xl font-bold text-white mb-8 text-center">Resume Builder</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="template-card">
+                        <h3 class="text-xl font-bold text-white mb-4">Template 1</h3>
+                        <button onclick="openBuilder('template1')" class="w-full p-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors">
+                            Use Template
+                        </button>
+                    </div>
+                    <div class="template-card">
+                        <h3 class="text-xl font-bold text-white mb-4">Template 2</h3>
+                        <button onclick="openBuilder('template2')" class="w-full p-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors">
+                            Use Template
+                        </button>
+                    </div>
+                    <div class="template-card">
+                        <h3 class="text-xl font-bold text-white mb-4">Template 3</h3>
+                        <button onclick="openBuilder('template3')" class="w-full p-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors">
+                            Use Template
+                        </button>
+                    </div>
+                    <div class="template-card">
+                        <h3 class="text-xl font-bold text-white mb-4">Template 4</h3>
+                        <button onclick="openBuilder('template4')" class="w-full p-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors">
+                            Use Template
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Industry Data with Resume Optimization Tips
+        const industryData = {
+            "Technology": {
+                tips: [
+                    "Highlight technical skills like programming languages (Python, Java, etc.).",
+                    "Showcase projects and GitHub repositories.",
+                    "Include certifications (e.g., AWS, Azure, Google Cloud).",
+                    "Mention experience with Agile methodologies.",
+                    "Quantify achievements (e.g., 'Improved system efficiency by 30%')."
+                ]
+            },
+            "Healthcare": {
+                tips: [
+                    "Emphasize clinical skills and certifications (e.g., CPR, BLS).",
+                    "Include experience with electronic health records (EHR) systems.",
+                    "Highlight patient care and communication skills.",
+                    "Mention any specialized training or degrees.",
+                    "Quantify achievements (e.g., 'Reduced patient wait times by 20%')."
+                ]
+            },
+            "Finance": {
+                tips: [
+                    "Showcase financial analysis and modeling skills.",
+                    "Include certifications (e.g., CFA, CPA).",
+                    "Highlight experience with financial software (e.g., QuickBooks, SAP).",
+                    "Mention achievements in cost reduction or revenue growth.",
+                    "Quantify results (e.g., 'Increased portfolio returns by 15%')."
+                ]
+            },
+            "Education": {
+                tips: [
+                    "Highlight teaching experience and certifications.",
+                    "Include curriculum development skills.",
+                    "Mention experience with educational technology (e.g., LMS platforms).",
+                    "Showcase student performance improvements.",
+                    "Quantify achievements (e.g., 'Improved test scores by 25%')."
+                ]
+            },
+            "Manufacturing": {
+                tips: [
+                    "Emphasize technical skills (e.g., CAD, CNC machining).",
+                    "Include experience with lean manufacturing principles.",
+                    "Highlight safety certifications (e.g., OSHA).",
+                    "Mention process improvement achievements.",
+                    "Quantify results (e.g., 'Reduced production costs by 10%')."
+                ]
+            }
+        };
+
+        // Function to Display Optimization Tips
+        function displayOptimizationTips(industry) {
+            const container = document.getElementById('optimization-container');
+            container.innerHTML = ''; // Clear previous tips
+
+            if (industryData[industry]) {
+                const tips = industryData[industry].tips;
+                tips.forEach((tip, index) => {
+                    const tipElement = document.createElement('div');
+                    tipElement.className = 'bg-white bg-opacity-10 backdrop-filter backdrop-blur-md rounded-lg p-4 mb-4 text-white';
+                    tipElement.innerHTML = `
+                        <div class="flex items-center">
+                            <span class="text-emerald-400 mr-2">${index + 1}.</span>
+                            <p>${tip}</p>
+                        </div>
+                    `;
+                    container.appendChild(tipElement);
+                });
+            } else {
+                container.innerHTML = '<p class="text-white text-center">No optimization tips found for this industry.</p>';
+            }
+        }
+
+        // Function to Analyze Resume
+        function analyzeResume(file) {
+            const container = document.getElementById('resume-analysis-container');
+            container.innerHTML = `
+                <div class="bg-white bg-opacity-10 backdrop-filter backdrop-blur-md rounded-lg p-4 text-white">
+                    <h3 class="text-xl font-bold mb-2">Analysis Feedback</h3>
+                    <p>Resume analysis is in progress. Please wait...</p>
+                </div>
+            `;
+
+            // Simulate analysis (replace with actual API call)
+            setTimeout(() => {
+                const industry = document.getElementById('industry-select').value;
+                const feedback = industryData[industry] ? `Your resume is well-suited for the ${industry} industry.` : "Please select an industry for feedback.";
+                container.innerHTML = `
+                    <div class="bg-white bg-opacity-10 backdrop-filter backdrop-blur-md rounded-lg p-4 text-white">
+                        <h3 class="text-xl font-bold mb-2">Analysis Feedback</h3>
+                        <p>${feedback}</p>
+                    </div>
+                `;
+            }, 2000);
+        }
+
+        // Function to Open Resume Builder
+        function openBuilder(template) {
+            alert(`Opening ${template} builder...`);
+            // Redirect to Overleaf or open a new window with the template
+            window.open(`https://www.overleaf.com/latex/templates/${template}`, "_blank");
+        }
+
+        // Event Listeners
+        document.getElementById('search-btn').addEventListener('click', () => {
+            const industry = document.getElementById('industry-select').value;
+            if (industry) {
+                displayOptimizationTips(industry);
+            } else {
+                alert("Please select an industry!");
+            }
+        });
+
+        document.getElementById('analyze-btn').addEventListener('click', () => {
+            const fileInput = document.getElementById('resume-upload');
+            if (fileInput.files.length > 0) {
+                analyzeResume(fileInput.files[0]);
+            } else {
+                alert("Please upload a resume!");
+            }
+        });
+
+        // Initialize with Default Tips
+        document.addEventListener('DOMContentLoaded', () => {
+            displayOptimizationTips('Technology'); // Default industry tips
+        });
+    </script>
+</body>
+</html>

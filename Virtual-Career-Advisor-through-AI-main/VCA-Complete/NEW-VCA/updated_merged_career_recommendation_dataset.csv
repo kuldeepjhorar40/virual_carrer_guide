@@ -1,0 +1,71 @@
+ID,Age,Education Level,Skills,Interests,Personality Type,Work Experience (Years),Preferred Work Style,Career Recommended
+1,22,Bachelor's in CS,"Python, Java, SQL","Problem-Solving, Coding",IITJ,0,Independent,Software Engineer
+2,27,Master's in Data Science,"Python, R, Machine Learning","AI, Data Analysis",EITP,3,Analytical,Data Scientist
+3,25,Bachelor's in Cybersecurity,"Networking, Ethical Hacking","Cybersecurity, Ethical Hacking",ISTJ,2,Detail-Oriented,Cybersecurity Analyst
+4,30,Bachelor's in IT,"AWS, Azure, DevOps","Cloud Computing, Networking",INTP,6,Structured,Cloud Engineer
+5,28,PhD in AI,"Deep Learning, TensorFlow, NLP","AI, Machine Learning",IIFP,5,Innovative,AI/ML Engineer
+6,23,Bachelor's in CS,"Docker, Kubernetes, CI/CD","DevOps, Automation",ENTJ,1,Fast-Paced,DevOps Engineer
+7,26,Bachelor's in CS,"Solidity, Ethereum, Cryptography","Blockchain, Finance",IITJ,4,Logical,Blockchain Developer
+8,24,Bachelor's in Game Development,"C++, Unity, Unreal Engine","Gaming, Game Mechanics",ESFP,2,Creative,Game Developer
+9,29,Bachelor's in Electronics,"C, Microcontrollers, IoT","Embedded Systems, Hardware",ISTP,7,Hands-On,Embedded Systems Engineer
+10,27,Bachelor's in CS,"React, Node.js, MongoDB","Web Development, UX/UI",ENFP,3,Innovative,Full Stack Developer
+11,33,Master's in IT,"Java, Spring Boot",AI Research,EIFJ,1,Team-Oriented,Data Scientist
+12,34,PhD in AI,"C++, Embedded Systems",Cybersecurity,IITJ,2,Detail-Oriented,Cybersecurity Analyst
+13,35,Bachelor's in Cybersecurity,"React, JavaScript",Game Development,EITP,3,Freelance,Game Developer
+14,36,Diploma in Networking,"AWS, Cloud Computing",Cloud Solutions,ISTP,4,Analytical,Cloud Engineer
+15,22,Bachelor's in CS,"Python, SQL",Software Development,ESFJ,5,Independent,Software Engineer
+16,23,Master's in IT,"Java, Spring Boot",AI Research,IIFP,6,Team-Oriented,Data Scientist
+17,24,PhD in AI,"C++, Embedded Systems",Cybersecurity,EIFJ,7,Detail-Oriented,Cybersecurity Analyst
+18,25,Bachelor's in Cybersecurity,"React, JavaScript",Game Development,IITJ,8,Freelance,Game Developer
+19,26,Diploma in Networking,"AWS, Cloud Computing",Cloud Solutions,EITP,9,Analytical,Cloud Engineer
+20,27,Bachelor's in CS,"Python, SQL",Software Development, ISTP,0,Independent,Software Engineer
+21,28,Master's in IT,"Java, Spring Boot",AI Research, ESFJ,1,Team-Oriented,Data Scientist
+22,29,PhD in AI,"C++, Embedded Systems",Cybersecurity, IIFP,2,Detail-Oriented,Cybersecurity Analyst
+23,30,Bachelor's in Cybersecurity,"React, JavaScript",Game Development, EIFJ,3,Freelance,Game Developer
+24,31,Diploma in Networking,"AWS, Cloud Computing",Cloud Solutions, IITJ,4,Analytical,Cloud Engineer
+25,32,Bachelor's in CS,"Python, SQL",Software Development, EITP,5,Independent,Software Engineer
+26,33,Master's in IT,"Java, Spring Boot",AI Research, ISTP,6,Team-Oriented,Data Scientist
+27,34,PhD in AI,"C++, Embedded Systems",Cybersecurity, ESFJ,7,Detail-Oriented,Cybersecurity Analyst
+28,35,Bachelor's in Cybersecurity,"React, JavaScript",Game Development, IIFP,8,Freelance,Game Developer
+29,36,Diploma in Networking,"AWS, Cloud Computing",Cloud Solutions, EIFJ,9,Analytical,Cloud Engineer
+30,22,Bachelor's in CS,"Python, SQL",Software Development, IITJ,0,Independent,Software Engineer
+31,23,Master's in IT,"Java, Spring Boot",AI Research, EITP,1,Team-Oriented,Data Scientist
+32,24,PhD in AI,"C++, Embedded Systems",Cybersecurity, ISTP,2,Detail-Oriented,Cybersecurity Analyst
+33,25,Bachelor's in Cybersecurity,"React, JavaScript",Game Development, ESFJ,3,Freelance,Game Developer
+34,26,Diploma in Networking,"AWS, Cloud Computing",Cloud Solutions, IIFP,4,Analytical,Cloud Engineer
+35,27,Bachelor's in CS,"Python, SQL",Software Development, EIFJ,5,Independent,Software Engineer
+36,28,Master's in IT,"Java, Spring Boot",AI Research, IITJ,6,Team-Oriented,Data Scientist
+37,29,PhD in AI,"C++, Embedded Systems",Cybersecurity, EITP,7,Detail-Oriented,Cybersecurity Analyst
+38,30,Bachelor's in Cybersecurity,"React, JavaScript",Game Development,ISTP,8,Freelance,Game Developer
+39,31,Diploma in Networking,"AWS, Cloud Computing",Cloud Solutions, ISFJ,9,Analytical,Cloud Engineer
+40,32,Bachelor's in CS,"Python, SQL",Software Development, IIFP,0,Independent,Software Engineer
+41,33,Master's in IT,"Java, Spring Boot",AI Research, EIFJ,1,Team-Oriented,Data Scientist
+42,34,PhD in AI,"C++, Embedded Systems",Cybersecurity, IITJ,2,Detail-Oriented,Cybersecurity Analyst
+43,35,Bachelor's in Cybersecurity,"React, JavaScript",Game Development, EITP,3,Freelance,Game Developer
+44,36,Diploma in Networking,"AWS, Cloud Computing",Cloud Solutions, ISTP,4,Analytical,Cloud Engineer
+45,22,Bachelor's in CS,"Python, SQL",Software Development, ESFJ,5,Independent,Software Engineer
+46,23,Master's in IT,"Java, Spring Boot",AI Research, IIFP,6,Team-Oriented,Data Scientist
+47,24,PhD in AI,"C++, Embedded Systems",Cybersecurity, EIFJ,7,Detail-Oriented,Cybersecurity Analyst
+48,25,Bachelor's in Cybersecurity,"React, JavaScript",Game Development, IITJ,8,Freelance,Game Developer
+49,26,Diploma in Networking,"AWS, Cloud Computing",Cloud Solutions, EITP,9,Analytical,Cloud Engineer
+50,27,Bachelor's in CS,"Python, SQL",Software Development, ISTP,0,Independent,Software Engineer
+1,24,Bachelor's in Business,"Marketing, Sales, Communication","Branding, Advertising", EIFJ,2,Team-Oriented,Marketing Manager
+2,27,Master's in Finance,"Accounting, Financial Analysis","Economics, Investing",ISTJ,4,Detail-Oriented,Financial Analyst
+3,26,Bachelor's in Journalism,"Writing, Editing, Research","News, Storytelling", IIFP,3,Creative,Journalist
+4,29,Bachelor's in Psychology,"Counseling, Research, Communication","Human Behavior, Mental Health",INFJ,5,Empathetic,Psychologist
+5,23,Bachelor's in Education,"Teaching, Curriculum Planning","Helping Others, Public Speaking", ESFJ,1,Structured,School Teacher
+6,30,Diploma in Culinary Arts,"Cooking, Food Safety, Creativity","Food, Culinary Arts",ISFP,8,Hands-On,Chef
+7,25,Bachelor's in Fine Arts,"Painting, Sculpting, Creativity","Arts, Visual Expression", IIFP,3,Freelance,Artist
+8,28,MBA,"Business Strategy, Leadership","Entrepreneurship, Management", EITP,6,Innovative,Business Consultant
+9,24,Bachelor's in Hospitality,"Event Planning, Customer Service","Travel, Tourism",ESFP,2,People-Oriented,Event Manager
+10,26,Diploma in Fashion Design,"Sketching, Textile Knowledge","Fashion, Creativity",ISFP,4,Creative,Fashion Designer
+11,33,Master's in Arts,"Writing, Public Speaking",Media and PR, EITP,1,Team-Oriented,Human Resource Manager
+12,34,Diploma in Public Relations,"Social Work, Counseling",Social Welfare, EIFJ,2,Detail-Oriented,Public Relations Specialist
+13,35,PhD in Psychology,"Creativity, Design",Design and Aesthetics,INFJ,3,Freelance,Social Worker
+14,36,Associate Degree,Legal Knowledge,Law and Governance,ESFP,4,Creative,Interior Designer
+15,22,Bachelor's in Business,"Communication, Negotiation",People Management,INTP,5,Independent,Personal Trainer
+16,23,Master's in Arts,"Writing, Public Speaking",Media and PR,ISFP,6,Team-Oriented,Real Estate Agent
+17,24,Diploma in Public Relations,"Social Work, Counseling",Social Welfare,EITP,7,Detail-Oriented,Music Producer
+18,25,PhD in Psychology,"Creativity, Design",Design and Aesthetics, EIFJ,8,Freelance,Actor
+19,26,Associate Degree,Legal Knowledge,Law and Governance,INFJ,9,Creative,Legal Advisor
+20,27,Bachelor's in Business,"Communication, Negotiation",People Management,ESFP,0,Independent,Political Analyst

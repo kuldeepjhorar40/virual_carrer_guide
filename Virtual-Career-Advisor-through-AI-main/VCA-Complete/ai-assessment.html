@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareerCompass - AI Assessment</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-gradient-to-br from-indigo-900 via-purple-800 to-pink-700 min-h-screen">
+    <!-- 3D Background Animation -->
+    <div id="background-animation" class="fixed top-0 left-0 w-full h-full z-0"></div>
+
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg border-b border-white border-opacity-20">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center">
+                <a href="index.html" class="text-white text-2xl font-bold flex items-center">
+                    <i class="fas fa-compass mr-2 text-emerald-400"></i>
+                    <span>CareerCompass</span>
+                </a>
+            </div>
+            <nav class="hidden md:flex">
+                <ul class="flex space-x-8">
+                    <li><a href="index.html" class="text-white hover:text-emerald-400 transition-colors">Home</a></li>
+                    <li><a href="index.html#features" class="text-white hover:text-emerald-400 transition-colors">Features</a></li>
+                    <li><a href="index.html#career-quiz" class="text-white hover:text-emerald-400 transition-colors">Career Quiz</a></li>
+                    <li><a href="index.html#about" class="text-white hover:text-emerald-400 transition-colors">About</a></li>
+                </ul>
+            </nav>
+            <button class="md:hidden text-white text-xl">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8 relative z-10">
+        <section class="py-16">
+            <div class="bg-white bg-opacity-10 backdrop-filter backdrop-blur-md rounded-2xl p-8 md:p-12 shadow-xl border border-white border-opacity-20">
+                <h2 class="text-3xl font-bold text-white mb-8">AI-Powered Career Assessment</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="feature-content">
+                        <h3 class="text-2xl font-bold text-emerald-400 mb-4">How It Works</h3>
+                        <p class="text-white opacity-80 mb-6">
+                            Our advanced AI system evaluates your unique combination of skills, 
+                            interests, and personality traits through a comprehensive assessment 
+                            process.
+                        </p>
+                        
+                        <div class="assessment-steps">
+                            <div class="assessment-step">
+                                <h4 class="text-lg font-bold text-white mb-2">Skill Analysis</h4>
+                                <p class="text-white opacity-80">Identify your core competencies and technical abilities</p>
+                            </div>
+                            
+                            <div class="assessment-step">
+                                <h4 class="text-lg font-bold text-white mb-2">Interest Matching</h4>
+                                <p class="text-white opacity-80">Discover careers aligned with your passions</p>
+                            </div>
+                            
+                            <div class="assessment-step">
+                                <h4 class="text-lg font-bold text-white mb-2">Personality Evaluation</h4>
+                                <p class="text-white opacity-80">Understand your work style and preferences</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="assessment-preview">
+                        <div class="bg-white bg-opacity-10 p-6 rounded-xl">
+                            <div class="animate-pulse">
+                                <div class="h-4 bg-emerald-400 rounded w-1/2 mb-4"></div>
+                                <div class="space-y-3">
+                                    <div class="h-3 bg-white bg-opacity-20 rounded w-3/4"></div>
+                                    <div class="h-3 bg-white bg-opacity-20 rounded"></div>
+                                    <div class="h-3 bg-white bg-opacity-20 rounded w-5/6"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-12 text-center">
+                    <a href="index.html#career-quiz" class="btn-primary">
+                        Start Your Assessment
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-8 bg-black bg-opacity-30 backdrop-filter backdrop-blur-md relative z-10">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <div class="text-white text-xl font-bold flex items-center">
+                        <i class="fas fa-compass mr-2 text-emerald-400"></i>
+                        <span>CareerCompass</span>
+                    </div>
+                    <p class="text-white opacity-60 mt-2">Your guide to career success</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-white hover:text-emerald-400 transition-colors">
+                        <i class="fab fa-twitter text-xl"></i>
+                    </a>
+                    <a href="#" class="text-white hover:text-emerald-400 transition-colors">
+                        <i class="fab fa-linkedin text-xl"></i>
+                    </a>
+                    <a href="#" class="text-white hover:text-emerald-400 transition-colors">
+                        <i class="fab fa-instagram text-xl"></i>
+                    </a>
+                    <a href="#" class="text-white hover:text-emerald-400 transition-colors">
+                        <i class="fab fa-facebook text-xl"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-white border-opacity-20 text-center">
+                <p class="text-white opacity-60">&copy; 2025 CareerCompass. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="main.js"></script>
+    <script src="quiz.js"></script>
+    <script src="chatbot.js"></script>
+</body>
+</html>

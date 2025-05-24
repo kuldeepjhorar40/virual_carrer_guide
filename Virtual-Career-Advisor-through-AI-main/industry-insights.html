@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Industry Insights - CareerCompass</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/ShaderPass.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/CopyShader.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/LuminosityHighPassShader.min.js"></script>
+    <style>
+        .search-container {
+            perspective: 1000px;
+        }
+        .glow-effect {
+            animation: glow 2s infinite alternate;
+        }
+        @keyframes glow {
+            from {
+                filter: drop-shadow(0 0 5px rgba(16, 185, 129, 0.5));
+            }
+            to {
+                filter: drop-shadow(0 0 15px rgba(16, 185, 129, 0.8));
+            }
+        }
+        #visualization-container {
+            height: 500px;
+            position: relative;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+        .custom-select {
+            appearance: none;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 0.75rem 2.5rem 0.75rem 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+        }
+        .custom-select:focus {
+            outline: none;
+            border-color: #10b981;
+            box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+        }
+        .custom-select option {
+            background-color: #1e293b;
+            color: white;
+        }
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-indigo-900 via-purple-800 to-pink-700 min-h-screen">
+    <header class="sticky top-0 z-50 bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg border-b border-white border-opacity-20">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="index.html" class="text-white text-2xl font-bold flex items-center">
+                <i class="fas fa-compass mr-2 text-emerald-400"></i>
+                <span>Virtual Career Advisor</span>
+            </a>
+            <nav class="hidden md:flex space-x-8">
+                <a href="#search" class="text-white hover:text-emerald-400 transition-colors">Search</a>
+                <a href="#visualization" class="text-white hover:text-emerald-400 transition-colors">Visualization</a>
+            </nav>
+        </div>
+    </header>
+    <main class="container mx-auto px-4 py-8 relative z-10">
+        <section class="my-16" id="search">
+            <div class="bg-white bg-opacity-10 backdrop-filter backdrop-blur-md rounded-2xl p-8">
+                <h2 class="text-3xl font-bold text-white mb-8 text-center">Industry Insights</h2>
+                <div class="flex flex-col md:flex-row justify-center items-center gap-4">
+                    <select id="industry-select" class="custom-select w-full md:w-1/2">
+                        <option value="" disabled selected>Select an industry...</option>
+                        <option value="Technology">Technology</option>
+                        <option value="Healthcare">Healthcare</option>
+                        <option value="Finance">Finance</option>
+                        <option value="Education">Education</option>
+                        <option value="Manufacturing">Manufacturing</option>
+                    </select>
+                    <button id="search-btn" class="w-full md:w-auto p-3 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors">
+                        <i class="fas fa-search mr-2"></i>Get Insights
+                    </button>
+                </div>
+            </div>
+        </section>
+        <section class="my-16" id="visualization">
+            <div class="bg-white bg-opacity-10 backdrop-filter backdrop-blur-md rounded-2xl p-8">
+                <h2 class="text-3xl font-bold text-white mb-8 text-center">3D Industry Insights</h2>
+                <div id="visualization-container"></div>
+                <div id="insight-details" class="mt-6 text-white text-center"></div>
+            </div>
+        </section>
+    </main>
+    <script>
+        const industryData = {
+            "Technology": {
+                description: "The technology sector is growing rapidly with advancements in AI, cloud computing, and cybersecurity.",
+                color: 0x10b981,
+                stats: {
+                    growth: "20% annually",
+                    jobs: "2 million new jobs by 2025"
+                },
+                modelType: "network",
+                particles: 500,
+                particleColor: 0x10b981
+            },
+            "Healthcare": {
+                description: "Healthcare is evolving with telemedicine, AI diagnostics, and personalized medicine.",
+                color: 0x3b82f6,
+                stats: {
+                    growth: "15% annually",
+                    jobs: "1.5 million new jobs by 2025"
+                },
+                modelType: "dna",
+                particles: 300,
+                particleColor: 0x3b82f6
+            },
+            "Finance": {
+                description: "The finance industry is being transformed by blockchain, fintech, and digital banking.",
+                color: 0xf59e0b,
+                stats: {
+                    growth: "10% annually",
+                    jobs: "1 million new jobs by 2025"
+                },
+                modelType: "blockchain",
+                particles: 400,
+                particleColor: 0xf59e0b
+            },
+            "Education": {
+                description: "EdTech is revolutionizing learning with online platforms, VR classrooms, and AI tutors.",
+                color: 0x8b5cf6,
+                stats: {
+                    growth: "12% annually",
+                    jobs: "800,000 new jobs by 2025"
+                },
+                modelType: "book",
+                particles: 200,
+                particleColor: 0x8b5cf6
+            },
+            "Manufacturing": {
+                description: "Smart manufacturing and automation are driving efficiency and innovation.",
+                color: 0xef4444,
+                stats: {
+                    growth: "8% annually",
+                    jobs: "500,000 new jobs by 2025"
+                },
+                modelType: "gears",
+                particles: 350,
+                particleColor: 0xef4444
+            }
+        };
+
+        // Three.js variables
+        let scene, camera, renderer, controls, composer, bloomPass;
+        let currentModel = null;
+        let particles = [];
+        let particleSystem = null;
+        let clock = new THREE.Clock();
+        let mixer = null;
+        let animations = [];
+
+        // Initialize Three.js scene
+        function initThreeJS() {
+            // Create scene
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x000000);
+            scene.fog = new THREE.FogExp2(0x000000, 0.002);
+
+            // Create camera
+            camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 15;
+            camera.position.y = 5;
+
+            // Create renderer
+            const container = document.getElementById('visualization-container');
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            container.appendChild(renderer.domElement);
+
+            // Add lights
+            const ambientLight = new THREE.AmbientLight(0x404040, 0.5);
+            scene.add(ambientLight);
+
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+            directionalLight.position.set(5, 10, 7);
+            directionalLight.castShadow = true;
+            directionalLight.shadow.mapSize.width = 1024;
+            directionalLight.shadow.mapSize.height = 1024;
+            scene.add(directionalLight);
+
+            const hemisphereLight = new THREE.HemisphereLight(0xffffbb, 0x080820, 1);
+            scene.add(hemisphereLight);
+
+            // Add controls
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            controls.minDistance = 5;
+            controls.maxDistance = 50;
+
+            // Post-processing effects
+            const renderScene = new THREE.RenderPass(scene, camera);
+            bloomPass = new THREE.UnrealBloomPass(
+                new THREE.Vector2(window.innerWidth, window.innerHeight),
+                1.5, 0.4, 0.85
+            );
+            bloomPass.threshold = 0;
+            bloomPass.strength = 1.5;
+            bloomPass.radius = 0.5;
+
+            composer = new THREE.EffectComposer(renderer);
+            composer.addPass(renderScene);
+            composer.addPass(bloomPass);
+
+            // Handle window resize
+            window.addEventListener('resize', onWindowResize);
+        }
+
+        function onWindowResize() {
+            const container = document.getElementById('visualization-container');
+            camera.aspect = container.clientWidth / container.clientHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            composer.setSize(container.clientWidth, container.clientHeight);
+        }
+
+        // Create industry-specific 3D models
+        function loadIndustryModel(industry) {
+            // Clear previous model and particles
+            if (currentModel) scene.remove(currentModel);
+            if (particleSystem) scene.remove(particleSystem);
+            if (mixer) {
+                animations.forEach(anim => mixer.uncacheAction(anim));
+                mixer = null;
+            }
+
+            const data = industryData[industry];
+            const color = data.color;
+            const particleColor = data.particleColor;
+
+            // Create particles
+            createParticles(data.particles, particleColor);
+
+            // Create model based on industry type
+            switch(data.modelType) {
+                case "network":
+                    createNetworkModel(color);
+                    break;
+                case "dna":
+                    createDnaModel(color);
+                    break;
+                case "blockchain":
+                    createBlockchainModel(color);
+                    break;
+                case "book":
+                    createBookModel(color);
+                    break;
+                case "gears":
+                    createGearsModel(color);
+                    break;
+            }
+
+            // Update insight details
+            const insightDetails = document.getElementById('insight-details');
+            insightDetails.innerHTML = `
+                <h3 class="text-2xl font-bold">${industry} Insights</h3>
+                <p class="mt-2">${data.description}</p>
+                <div class="mt-4">
+                    <p><strong>Growth:</strong> ${data.stats.growth}</p>
+                    <p><strong>Jobs:</strong> ${data.stats.jobs}</p>
+                </div>
+            `;
+        }
+
+        function createParticles(count, color) {
+            const particlesGeometry = new THREE.BufferGeometry();
+            const particlesMaterial = new THREE.PointsMaterial({
+                color: color,
+                size: 0.1,
+                transparent: true,
+                opacity: 0.8,
+                blending: THREE.AdditiveBlending
+            });
+
+            const positions = new Float32Array(count * 3);
+            const sizes = new Float32Array(count);
+            const colors = new Float32Array(count * 3);
+
+            for (let i = 0; i < count; i++) {
+                positions[i * 3] = (Math.random() - 0.5) * 20;
+                positions[i * 3 + 1] = (Math.random() - 0.5) * 20;
+                positions[i * 3 + 2] = (Math.random() - 0.5) * 20;
+
+                sizes[i] = Math.random() * 0.2 + 0.05;
+
+                colors[i * 3] = color.r || 0.5;
+                colors[i * 3 + 1] = color.g || 0.5;
+                colors[i * 3 + 2] = color.b || 0.5;
+            }
+
+            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            particlesGeometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+            particlesGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+            particleSystem = new THREE.Points(particlesGeometry, particlesMaterial);
+            scene.add(particleSystem);
+        }
+
+        function createNetworkModel(color) {
+            const group = new THREE.Group();
+            
+            // Create central sphere
+            const sphereGeometry = new THREE.SphereGeometry(1.5, 32, 32);
+            const sphereMaterial = new THREE.MeshPhongMaterial({ 
+                color: color, 
+                emissive: color, 
+                emissiveIntensity: 0.5,
+                shininess: 100 
+            });
+            const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+            sphere.castShadow = true;
+            group.add(sphere);
+
+            // Create nodes
+            const nodeCount = 8;
+            const nodes = [];
+            for (let i = 0; i < nodeCount; i++) {
+                const nodeGeometry = new THREE.SphereGeometry(0.3, 16, 16);
+                const nodeMaterial = new THREE.MeshPhongMaterial({ 
+                    color: color, 
+                    emissive: color, 
+                    emissiveIntensity: 0.3 
+                });
+                const node = new THREE.Mesh(nodeGeometry, nodeMaterial);
+                
+                // Position nodes in a sphere around center
+                const angle = (i / nodeCount) * Math.PI * 2;
+                const radius = 3 + Math.random() * 2;
+                node.position.x = Math.cos(angle) * radius;
+                node.position.y = (Math.random() - 0.5) * 4;
+                node.position.z = Math.sin(angle) * radius;
+                
+                node.castShadow = true;
+                group.add(node);
+                nodes.push(node);
+            }
+
+            // Create connections between nodes
+            const lineMaterial = new THREE.LineBasicMaterial({ 
+                color: color, 
+                transparent: true, 
+                opacity: 0.5 
+            });
+            
+            for (let i = 0; i < nodes.length; i++) {
+                // Connect to center
+                const centerGeometry = new THREE.BufferGeometry().setFromPoints([
+                    new THREE.Vector3(0, 0, 0),
+                    nodes[i].position.clone()
+                ]);
+                const centerLine = new THREE.Line(centerGeometry, lineMaterial);
+                group.add(centerLine);
+
+                // Connect to other nodes
+                for (let j = i + 1; j < nodes.length; j++) {
+                    if (Math.random() > 0.7) {
+                        const lineGeometry = new THREE.BufferGeometry().setFromPoints([
+                            nodes[i].position.clone(),
+                            nodes[j].position.clone()
+                        ]);
+                        const line = new THREE.Line(lineGeometry, lineMaterial);
+                        group.add(line);
+                    }
+                }
+            }
+
+            // Animation
+            group.userData.update = function(delta) {
+                sphere.rotation.y += delta * 0.5;
+                
+                nodes.forEach(node => {
+                    node.position.y += Math.sin(Date.now() * 0.001 + node.position.x) * 0.01;
+                    node.rotation.x += delta * 0.1;
+                    node.rotation.y += delta * 0.1;
+                });
+            };
+
+            currentModel = group;
+            scene.add(group);
+        }
+
+        function createDnaModel(color) {
+            const group = new THREE.Group();
+            
+            // Create DNA strands
+            const strandCount = 2;
+            const segmentCount = 30;
+            const radius = 1.5;
+            const height = 8;
+            
+            for (let s = 0; s < strandCount; s++) {
+                const strandGroup = new THREE.Group();
+                const angleOffset = s * Math.PI;
+                
+                for (let i = 0; i < segmentCount; i++) {
+                    const segmentHeight = (i / segmentCount) * height - height / 2;
+                    const angle = (i / segmentCount) * Math.PI * 4 + angleOffset;
+                    
+                    const segmentGeometry = new THREE.SphereGeometry(0.2, 16, 16);
+                    const segmentMaterial = new THREE.MeshPhongMaterial({ 
+                        color: color, 
+                        emissive: color, 
+                        emissiveIntensity: 0.3 
+                    });
+                    const segment = new THREE.Mesh(segmentGeometry, segmentMaterial);
+                    
+                    segment.position.x = Math.cos(angle) * radius;
+                    segment.position.y = segmentHeight;
+                    segment.position.z = Math.sin(angle) * radius;
+                    
+                    strandGroup.add(segment);
+                }
+                
+                // Create connections between segments
+                const lineGeometry = new THREE.BufferGeometry();
+                const positions = new Float32Array(segmentCount * 3);
+                
+                for (let i = 0; i < segmentCount; i++) {
+                    const segment = strandGroup.children[i];
+                    positions[i * 3] = segment.position.x;
+                    positions[i * 3 + 1] = segment.position.y;
+                    positions[i * 3 + 2] = segment.position.z;
+                }
+                
+                lineGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+                const lineMaterial = new THREE.LineBasicMaterial({ color: color, linewidth: 2 });
+                const line = new THREE.Line(lineGeometry, lineMaterial);
+                
+                strandGroup.add(line);
+                group.add(strandGroup);
+            }
+            
+            // Create connections between strands
+            for (let i = 0; i < segmentCount; i += 2) {
+                const segment1 = group.children[0].children[i];
+                const segment2 = group.children[1].children[i];
+                
+                if (segment1 && segment2) {
+                    const lineGeometry = new THREE.BufferGeometry().setFromPoints([
+                        segment1.position.clone(),
+                        segment2.position.clone()
+                    ]);
+                    const lineMaterial = new THREE.LineBasicMaterial({ 
+                        color: color, 
+                        transparent: true, 
+                        opacity: 0.7 
+                    });
+                    const line = new THREE.Line(lineGeometry, lineMaterial);
+                    group.add(line);
+                }
+            }
+            
+            // Animation
+            group.userData.update = function(delta) {
+                group.rotation.y += delta * 0.5;
+            };
+            
+            currentModel = group;
+            scene.add(group);
+        }
+
+        function createBlockchainModel(color) {
+            const group = new THREE.Group();
+            
+            // Create blocks
+            const blockCount = 8;
+            const blockSize = 0.8;
+            const blockGeometry = new THREE.BoxGeometry(blockSize, blockSize, blockSize);
+            const blockMaterial = new THREE.MeshPhongMaterial({ 
+                color: color, 
+                emissive: color, 
+                emissiveIntensity: 0.2,
+                specular: 0x111111,
+                shininess: 30
+            });
+            
+            const blocks = [];
+            for (let i = 0; i < blockCount; i++) {
+                const block = new THREE.Mesh(blockGeometry, blockMaterial);
+                block.position.y = i * blockSize * 1.2 - (blockCount * blockSize * 1.2) / 2 + blockSize / 2;
+                block.position.x = (Math.random() - 0.5) * 2;
+                block.position.z = (Math.random() - 0.5) * 2;
+                
+                block.castShadow = true;
+                block.receiveShadow = true;
+                group.add(block);
+                blocks.push(block);
+            }
+            
+            // Create connections between blocks
+            const lineMaterial = new THREE.LineBasicMaterial({ 
+                color: color, 
+                linewidth: 2 
+            });
+            
+            for (let i = 0; i < blocks.length - 1; i++) {
+                const lineGeometry = new THREE.BufferGeometry().setFromPoints([
+                    blocks[i].position.clone(),
+                    blocks[i + 1].position.clone()
+                ]);
+                const line = new THREE.Line(lineGeometry, lineMaterial);
+                group.add(line);
+            }
+            
+            // Animation
+            group.userData.update = function(delta) {
+                blocks.forEach((block, index) => {
+                    block.rotation.x += delta * 0.2;
+                    block.rotation.y += delta * 0.3;
+                    
+                    // Slight floating effect
+                    block.position.y += Math.sin(Date.now() * 0.001 + index) * 0.01;
+                });
+            };
+            
+            currentModel = group;
+            scene.add(group);
+        }
+
+        function createBookModel(color) {
+            const group = new THREE.Group();
+            
+            // Create book cover
+            const coverGeometry = new THREE.BoxGeometry(3, 4, 0.5);
+            const coverMaterial = new THREE.MeshPhongMaterial({ 
+                color: color, 
+                emissive: color, 
+                emissiveIntensity: 0.1,
+                specular: 0x111111,
+                shininess: 30
+            });
+            const cover = new THREE.Mesh(coverGeometry, coverMaterial);
+            cover.position.z = -0.25;
+            cover.castShadow = true;
+            group.add(cover);
+            
+            // Create pages
+            const pageCount = 20;
+            const pageGroup = new THREE.Group();
+            
+            for (let i = 0; i < pageCount; i++) {
+                const pageGeometry = new THREE.BoxGeometry(2.9, 3.9, 0.02);
+                const pageMaterial = new THREE.MeshPhongMaterial({ 
+                    color: 0xffffff, 
+                    emissive: color, 
+                    emissiveIntensity: 0.05 
+                });
+                const page = new THREE.Mesh(pageGeometry, pageMaterial);
+                
+                // Position pages with slight curve
+                const angle = (i / pageCount) * Math.PI * 0.5;
+                page.position.z = Math.sin(angle) * 0.2;
+                page.position.x = Math.cos(angle) * 0.1 - 0.1;
+                page.rotation.y = -angle;
+                
+                pageGroup.add(page);
+            }
+            
+            group.add(pageGroup);
+            
+            // Create knowledge particles
+            const particleCount = 50;
+            const particleGeometry = new THREE.BufferGeometry();
+            const positions = new Float32Array(particleCount * 3);
+            const sizes = new Float32Array(particleCount);
+            
+            for (let i = 0; i < particleCount; i++) {
+                positions[i * 3] = (Math.random() - 0.5) * 5;
+                positions[i * 3 + 1] = (Math.random() - 0.5) * 5;
+                positions[i * 3 + 2] = Math.random() * 2;
+                
+                sizes[i] = Math.random() * 0.2 + 0.05;
+            }
+            
+            particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            particleGeometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+            
+            const particleMaterial = new THREE.PointsMaterial({
+                color: color,
+                size: 0.1,
+                transparent: true,
+                opacity: 0.8,
+                blending: THREE.AdditiveBlending
+            });
+            
+            const particleSystem = new THREE.Points(particleGeometry, particleMaterial);
+            group.add(particleSystem);
+            
+            // Animation
+            group.userData.update = function(delta) {
+                // Slowly open and close the book
+                const time = Date.now() * 0.001;
+                const openAmount = (Math.sin(time * 0.5) * 0.5 + 0.5);
+                
+                pageGroup.children.forEach((page, i) => {
+                    const pageOpenAmount = openAmount * (i / pageCount);
+                    const angle = pageOpenAmount * Math.PI * 0.5;
+                    
+                    page.position.z = Math.sin(angle) * 0.2;
+                    page.position.x = Math.cos(angle) * 0.1 - 0.1;
+                    page.rotation.y = -angle;
+                });
+                
+                // Animate particles
+                const particlePositions = particleGeometry.attributes.position.array;
+                for (let i = 0; i < particleCount; i++) {
+                    particlePositions[i * 3 + 2] += Math.sin(time + i) * 0.01;
+                    if (particlePositions[i * 3 + 2] > 2) {
+                        particlePositions[i * 3 + 2] = 0;
+                    }
+                }
+                particleGeometry.attributes.position.needsUpdate = true;
+            };
+            
+            currentModel = group;
+            scene.add(group);
+        }
+
+        function createGearsModel(color) {
+            const group = new THREE.Group();
+            
+            // Create large central gear
+            const largeGear = createGear(2, 0.5, 16, color);
+            largeGear.position.y = 0;
+            group.add(largeGear);
+            
+            // Create medium gears
+            const mediumGear1 = createGear(1.5, 0.4, 12, color);
+            mediumGear1.position.set(3, 0, 0);
+            group.add(mediumGear1);
+            
+            const mediumGear2 = createGear(1.5, 0.4, 12, color);
+            mediumGear2.position.set(-3, 0, 0);
+            group.add(mediumGear2);
+            
+            // Create small gears
+            const smallGear1 = createGear(1, 0.3, 8, color);
+            smallGear1.position.set(5, 0, 0);
+            group.add(smallGear1);
+            
+            const smallGear2 = createGear(1, 0.3, 8, color);
+            smallGear2.position.set(-5, 0, 0);
+            group.add(smallGear2);
+            
+            // Create connections
+            const lineMaterial = new THREE.LineBasicMaterial({ 
+                color: color, 
+                linewidth: 1 
+            });
+            
+            const connections = [
+                [largeGear, mediumGear1],
+                [largeGear, mediumGear2],
+                [mediumGear1, smallGear1],
+                [mediumGear2, smallGear2]
+            ];
+            
+            connections.forEach(([gear1, gear2]) => {
+                const lineGeometry = new THREE.BufferGeometry().setFromPoints([
+                    gear1.position.clone(),
+                    gear2.position.clone()
+                ]);
+                const line = new THREE.Line(lineGeometry, lineMaterial);
+                group.add(line);
+            });
+            
+            // Animation
+            group.userData.update = function(delta) {
+                // Rotate gears at different speeds to simulate meshing
+                largeGear.rotation.z -= delta * 0.5;
+                mediumGear1.rotation.z += delta * 0.666;
+                mediumGear2.rotation.z += delta * 0.666;
+                smallGear1.rotation.z -= delta * 1;
+                smallGear2.rotation.z -= delta * 1;
+            };
+            
+            currentModel = group;
+            scene.add(group);
+        }
+
+        function createGear(radius, thickness, teeth, color) {
+            const group = new THREE.Group();
+            
+            // Create gear shape
+            const shape = new THREE.Shape();
+            const toothDepth = radius * 0.2;
+            
+            shape.moveTo(radius, 0);
+            
+            for (let i = 0; i < teeth; i++) {
+                const angle1 = (i / teeth) * Math.PI * 2;
+                const angle2 = ((i + 0.5) / teeth) * Math.PI * 2;
+                const angle3 = ((i + 1) / teeth) * Math.PI * 2;
+                
+                shape.lineTo(
+                    (radius - toothDepth) * Math.cos(angle1),
+                    (radius - toothDepth) * Math.sin(angle1)
+                );
+                
+                shape.lineTo(
+                    radius * Math.cos(angle2),
+                    radius * Math.sin(angle2)
+                );
+                
+                shape.lineTo(
+                    (radius - toothDepth) * Math.cos(angle3),
+                    (radius - toothDepth) * Math.sin(angle3)
+                );
+            }
+            
+            shape.lineTo(radius, 0);
+            
+            const extrudeSettings = {
+                steps: 1,
+                depth: thickness,
+                bevelEnabled: false
+            };
+            
+            const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+            const material = new THREE.MeshPhongMaterial({ 
+                color: color,
+                specular: 0x111111,
+                shininess: 30
+            });
+            
+            const mesh = new THREE.Mesh(geometry, material);
+            mesh.castShadow = true;
+            mesh.receiveShadow = true;
+            group.add(mesh);
+            
+            // Create center cylinder
+            const cylinderGeometry = new THREE.CylinderGeometry(
+                radius * 0.3, radius * 0.3, thickness * 1.2, 16
+            );
+            const cylinderMaterial = new THREE.MeshPhongMaterial({ 
+                color: 0x333333,
+                specular: 0x111111,
+                shininess: 30
+            });
+            
+            const cylinder = new THREE.Mesh(cylinderGeometry, cylinderMaterial);
+            cylinder.rotation.x = Math.PI / 2;
+            cylinder.castShadow = true;
+            cylinder.receiveShadow = true;
+            group.add(cylinder);
+            
+            return group;
+        }
+
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            const delta = clock.getDelta();
+            
+            if (currentModel && currentModel.userData.update) {
+                currentModel.userData.update(delta);
+            }
+            
+            if (particleSystem) {
+                particleSystem.rotation.y += delta * 0.1;
+            }
+            
+            controls.update();
+            composer.render();
+        }
+
+        // Event listeners
+        document.getElementById('search-btn').addEventListener('click', () => {
+            const industry = document.getElementById('industry-select').value;
+            if (industry) {
+                loadIndustryModel(industry);
+            } else {
+                alert("Please select an industry!");
+            }
+        });
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', () => {
+            initThreeJS();
+            animate();
+            
+            // Load default industry
+            document.getElementById('industry-select').value = 'Technology';
+            loadIndustryModel('Technology');
+        });
+    </script>
+</body>
+</html>

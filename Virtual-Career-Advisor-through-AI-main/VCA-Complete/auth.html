@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareerCompass - Auth</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .auth-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        .auth-input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        .auth-input:focus {
+            border-color: #10b981;
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+        }
+        .auth-link:hover {
+            color: #10b981;
+            text-decoration: underline;
+        }
+        /* Auth Modals */
+#authModal input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+#authModal input {
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+#authModal input:focus {
+    outline: none;
+    border-color: #10b981;
+    box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.5);
+}
+    </style>
+</head>
+<body class="bg-gradient-to-br from-indigo-900 via-purple-800 to-pink-700 min-h-screen flex items-center justify-center">
+    <!-- Auth Modals -->
+<div id="authModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+    <div class="bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-2xl p-8 w-96 relative">
+        <button id="closeAuthModal" class="absolute top-4 right-4 text-white hover:text-emerald-400">
+            <i class="fas fa-times"></i>
+        </button>
+        
+        <!-- Sign Up Form -->
+        <div id="signupForm" class="hidden">
+            <h2 class="text-2xl font-bold text-white mb-6">Create Account</h2>
+            <form id="signupFormElement" class="space-y-4">
+                <input type="text" id="signupUsername" placeholder="Username" 
+                       class="w-full px-4 py-2 bg-white bg-opacity-20 rounded-lg text-white placeholder-gray-300">
+                <input type="email" id="signupEmail" placeholder="Email" 
+                       class="w-full px-4 py-2 bg-white bg-opacity-20 rounded-lg text-white placeholder-gray-300">
+                <input type="password" id="signupPassword" placeholder="Password" 
+                       class="w-full px-4 py-2 bg-white bg-opacity-20 rounded-lg text-white placeholder-gray-300">
+                <button type="submit" 
+                        class="w-full bg-emerald-500 hover:bg-emerald-600 text-white py-2 rounded-lg transition-colors">
+                    Sign Up
+                </button>
+            </form>
+            <p class="text-white mt-4">
+                Already have an account? 
+                <button id="switchToLogin" class="text-emerald-400 hover:underline">Log In</button>
+            </p>
+        </div>
+
+        <!-- Login Form -->
+        <div id="loginForm">
+            <h2 class="text-2xl font-bold text-white mb-6">Welcome Back</h2>
+            <form id="loginFormElement" class="space-y-4">
+                <input type="text" id="loginUsername" placeholder="Username or Email" 
+                       class="w-full px-4 py-2 bg-white bg-opacity-20 rounded-lg text-white placeholder-gray-300">
+                <input type="password" id="loginPassword" placeholder="Password" 
+                       class="w-full px-4 py-2 bg-white bg-opacity-20 rounded-lg text-white placeholder-gray-300">
+                <button type="submit" 
+                        class="w-full bg-emerald-500 hover:bg-emerald-600 text-white py-2 rounded-lg transition-colors">
+                    Sign In
+                </button>
+            </form>
+            <p class="text-white mt-4">
+                Don't have an account? 
+                <button id="switchToSignup" class="text-emerald-400 hover:underline">Sign Up</button>
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- Profile Modal -->
+<div id="profileModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+    <div class="bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-2xl p-8 w-96 relative">
+        <button id="closeProfileModal" class="absolute top-4 right-4 text-white hover:text-emerald-400">
+            <i class="fas fa-times"></i>
+        </button>
+        <h2 class="text-2xl font-bold text-white mb-6">Your Profile</h2>
+        <div id="profileContent" class="text-white space-y-4">
+            <!-- Profile content will be loaded here -->
+        </div>
+    </div>
+</div>
+
+<div class="auth-container rounded-2xl p-8 w-full max-w-md">
+    <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-white mb-2">
+            <i class="fas fa-compass mr-2 text-emerald-400"></i>
+            CareerCompass
+        </h1>
+        <p class="text-white opacity-80" id="authType">Sign In to Continue</p>
+    </div>
+
+    <form id="authForm" class="space-y-6">
+        <div id="nameField" class="hidden">
+            <input type="text" id="username" placeholder="Username" 
+                   class="auth-input w-full px-4 py-3 rounded-lg text-white placeholder-gray-400"
+                   required minlength="3">
+        </div>
+        
+        <div>
+            <input type="email" id="email" placeholder="Email Address" 
+                   class="auth-input w-full px-4 py-3 rounded-lg text-white placeholder-gray-400"
+                   required>
+        </div>
+        
+        <div>
+            <input type="password" id="password" placeholder="Password" 
+                   class="auth-input w-full px-4 py-3 rounded-lg text-white placeholder-gray-400"
+                   required minlength="6">
+        </div>
+
+        <button type="submit" 
+                class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 px-4 rounded-lg transition-colors">
+            Continue
+        </button>
+    </form>
+
+    <div class="mt-6 text-center">
+        <span class="text-white opacity-80" id="toggleText">Don't have an account? </span>
+        <button id="toggleAuth" class="text-emerald-400 auth-link">Sign Up</button>
+    </div>
+</div>
+
+<script>
+    const authForm = document.getElementById('authForm');
+    const toggleAuth = document.getElementById('toggleAuth');
+    const authType = document.getElementById('authType');
+    const toggleText = document.getElementById('toggleText');
+    const nameField = document.getElementById('nameField');
+    let isSignUp = false;
+
+    // Toggle between Sign In/Sign Up
+    toggleAuth.addEventListener('click', () => {
+        isSignUp = !isSignUp;
+        nameField.classList.toggle('hidden', !isSignUp);
+        authType.textContent = isSignUp ? 'Create New Account' : 'Sign In to Continue';
+        toggleText.textContent = isSignUp ? 'Already have an account? ' : 'Don\'t have an account? ';
+        toggleAuth.textContent = isSignUp ? 'Sign In' : 'Sign Up';
+        authForm.querySelector('button').textContent = isSignUp ? 'Create Account' : 'Sign In';
+    });
+
+    // Handle form submission
+    authForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const username = isSignUp ? document.getElementById('username').value : null;
+
+        if (isSignUp) {
+            if (!validateSignUp(username, email, password)) return;
+            signUp(username, email, password);
+        } else {
+            if (!validateSignIn(email, password)) return;
+            signIn(email, password);
+        }
+    });
+
+    function validateSignUp(username, email, password) {
+        if (username.length < 3) {
+            alert('Username must be at least 3 characters');
+            return false;
+        }
+        if (!validateEmail(email)) {
+            alert('Please enter a valid email');
+            return false;
+        }
+        if (password.length < 6) {
+            alert('Password must be at least 6 characters');
+            return false;
+        }
+        return true;
+    }
+
+    function validateSignIn(email, password) {
+        if (!validateEmail(email)) {
+            alert('Please enter a valid email');
+            return false;
+        }
+        if (password.length < 6) {
+            alert('Password must be at least 6 characters');
+            return false;
+        }
+        return true;
+    }
+
+    function validateEmail(email) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    function signUp(username, email, password) {
+        const users = JSON.parse(localStorage.getItem('users') || []);
+        if (users.some(user => user.email === email)) {
+            alert('User already exists!');
+            return;
+        }
+        
+        users.push({ username, email, password });
+        localStorage.setItem('users', JSON.stringify(users));
+        alert('Account created successfully!');
+        window.location.href = 'index.html';
+    }
+
+    function signIn(email, password) {
+        const users = JSON.parse(localStorage.getItem('users')) || [];
+        const user = users.find(u => u.email === email && u.password === password);
+        
+        if (user) {
+            localStorage.setItem('currentUser', JSON.stringify(user));
+            window.location.href = 'index.html';
+        } else {
+            alert('Invalid credentials!');
+        }
+    }
+    // Auth System
+document.addEventListener('DOMContentLoaded', () => {
+    // Initialize users in localStorage
+    if (!localStorage.getItem('users')) {
+        localStorage.setItem('users', JSON.stringify([]));
+    }
+
+    // Auth elements
+    const authButton = document.getElementById('authButton');
+    const userGreeting = document.getElementById('userGreeting');
+    const authModal = document.getElementById('authModal');
+    const profileModal = document.getElementById('profileModal');
+
+    // Check if user is logged in
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    if (currentUser) {
+        updateAuthState(currentUser);
+    }
+
+    // Auth modal toggle
+    authButton.addEventListener('click', () => showAuthModal('login'));
+    document.getElementById('closeAuthModal').addEventListener('click', () => hideAuthModal());
+    document.getElementById('switchToSignup').addEventListener('click', () => showAuthModal('signup'));
+    document.getElementById('switchToLogin').addEventListener('click', () => showAuthModal('login'));
+
+    // Profile modal
+    userGreeting.addEventListener('click', () => showProfileModal());
+    document.getElementById('closeProfileModal').addEventListener('click', () => hideProfileModal());
+
+    // Signup form
+    document.getElementById('signupFormElement').addEventListener('submit', handleSignup);
+    
+    // Login form
+    document.getElementById('loginFormElement').addEventListener('submit', handleLogin);
+
+    // Logout functionality
+    document.addEventListener('click', (e) => {
+        if (e.target.id === 'logoutButton') {
+            localStorage.removeItem('currentUser');
+            updateAuthState(null);
+            hideProfileModal();
+        }
+    });
+});
+
+function handleSignup(e) {
+    e.preventDefault();
+    const users = JSON.parse(localStorage.getItem('users'));
+    const newUser = {
+        username: document.getElementById('signupUsername').value,
+        email: document.getElementById('signupEmail').value,
+        password: document.getElementById('signupPassword').value,
+        createdAt: new Date().toISOString(),
+        progress: {}
+    };
+
+    if (users.some(u => u.email === newUser.email)) {
+        alert('Email already exists!');
+        return;
+    }
+
+    users.push(newUser);
+    localStorage.setItem('users', JSON.stringify(users));
+    localStorage.setItem('currentUser', JSON.stringify(newUser));
+    updateAuthState(newUser);
+    hideAuthModal();
+    showProfileModal();
+}
+
+function handleLogin(e) {
+    e.preventDefault();
+    const users = JSON.parse(localStorage.getItem('users'));
+    const identifier = document.getElementById('loginUsername').value;
+    const password = document.getElementById('loginPassword').value;
+
+    const user = users.find(u => 
+        (u.username === identifier || u.email === identifier) && 
+        u.password === password
+    );
+
+    if (user) {
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        updateAuthState(user);
+        hideAuthModal();
+    } else {
+        alert('Invalid credentials!');
+    }
+}
+
+function updateAuthState(user) {
+    const authButton = document.getElementById('authButton');
+    const userGreeting = document.getElementById('userGreeting');
+    
+    if (user) {
+        userGreeting.classList.remove('hidden');
+        userGreeting.textContent = `Hi, ${user.username}!`;
+        authButton.classList.add('hidden');
+    } else {
+        userGreeting.classList.add('hidden');
+        authButton.classList.remove('hidden');
+    }
+}
+
+function showAuthModal(formType) {
+    document.getElementById('authModal').classList.remove('hidden');
+    document.getElementById('signupForm').classList.toggle('hidden', formType !== 'signup');
+    document.getElementById('loginForm').classList.toggle('hidden', formType !== 'login');
+}
+
+function hideAuthModal() {
+    document.getElementById('authModal').classList.add('hidden');
+    // Clear form fields
+    document.getElementById('signupUsername').value = '';
+    document.getElementById('signupEmail').value = '';
+    document.getElementById('signupPassword').value = '';
+    document.getElementById('loginUsername').value = '';
+    document.getElementById('loginPassword').value = '';
+}
+
+function showProfileModal() {
+    const user = JSON.parse(localStorage.getItem('currentUser'));
+    const profileContent = document.getElementById('profileContent');
+    
+    profileContent.innerHTML = `
+        <div class="space-y-2">
+            <p><strong>Username:</strong> ${user.username}</p>
+            <p><strong>Email:</strong> ${user.email}</p>
+            <p><strong>Member since:</strong> ${new Date(user.createdAt).toLocaleDateString()}</p>
+        </div>
+        <button id="logoutButton" class="w-full bg-red-500 hover:bg-red-600 text-white py-2 rounded-lg transition-colors mt-4">
+            Log Out
+        </button>
+    `;
+    
+    profileModal.classList.remove('hidden');
+}
+
+function hideProfileModal() {
+    profileModal.classList.add('hidden');
+}
+</script>
+</body>
+</html>

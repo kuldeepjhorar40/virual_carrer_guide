@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career Roadmap - CareerCompass</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        .roadmap-container { perspective: 1000px; }
+        .timeline-node {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            transform-style: preserve-3d;
+        }
+        .timeline-node:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2);
+        }
+        .node-connector {
+            height: 40px;
+            width: 2px;
+            background: linear-gradient(to bottom, #10b981, transparent);
+        }
+        .glow-effect { animation: glow 2s infinite alternate; }
+        @keyframes glow {
+            from { filter: drop-shadow(0 0 5px rgba(16, 185, 129, 0.5)); }
+            to { filter: drop-shadow(0 0 15px rgba(16, 185, 129, 0.8)); }
+        }
+        .roadmap-3d { position: relative; height: 500px; }
+        #roadmap-bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        .career-input-container {
+            max-width: 600px;
+            margin: 2rem auto;
+            position: relative;
+        }
+        #careerInput {
+            width: 100%;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50px;
+            color: white;
+            font-size: 1.1rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        #careerInput:focus {
+            outline: none;
+            border-color: #10b981;
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+        }
+        .floating-card {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 2rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-indigo-900 via-purple-800 to-pink-700 min-h-screen">
+    <div id="roadmap-bg-animation"></div>
+
+    <header class="sticky top-0 z-50 bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg border-b border-white border-opacity-20">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="#" class="text-white text-2xl font-bold flex items-center">
+                <i class="fas fa-compass mr-2 text-emerald-400"></i>
+                <span>Virtual Career Advisor</span>
+            </a>
+            <nav class="hidden md:flex space-x-8">
+                <a href="#timeline" class="text-white hover:text-emerald-400 transition-colors">Timeline</a>
+                <a href="#skills" class="text-white hover:text-emerald-400 transition-colors">Skills Map</a>
+                <a href="#resources" class="text-white hover:text-emerald-400 transition-colors">Resources</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="career-input-container">
+        <form id="careerForm" class="relative">
+            <input type="text" id="careerInput" placeholder="Enter your desired career (e.g., Software Engineer)" 
+                   autocomplete="off">
+            <div id="suggestions" class="floating-card mt-2 w-full"></div>
+        </form>
+    </div>
+
+    <main class="container mx-auto px-4 py-8 relative z-10">
+        <section class="roadmap-3d my-16" id="3d-view">
+            <div class="text-center mb-8">
+                <h1 class="text-4xl font-bold text-white mb-4" id="careerTitle">Your Career Orbit</h1>
+                <p class="text-white opacity-80" id="careerDescription">Interactive 3D visualization of your career path</p>
+            </div>
+            <div id="orbitalContainer" class="relative h-full"></div>
+        </section>
+
+        <section class="roadmap-container my-16" id="timeline">
+            <div class="bg-white bg-opacity-10 backdrop-filter backdrop-blur-md rounded-2xl p-8">
+                <h2 class="text-3xl font-bold text-white mb-8 text-center">Career Timeline</h2>
+                <div class="timeline-flow space-y-12"></div>
+            </div>
+        </section>
+
+        <section class="my-16" id="skills">
+            <div class="bg-white bg-opacity-10 backdrop-filter backdrop-blur-md rounded-2xl p-8">
+                <h2 class="text-3xl font-bold text-white mb-8 text-center">Skills Development Map</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="skills-grid"></div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const careerDatabase = {
+           
+                // Existing entries...
+                'devops engineer': {
+                    title: 'DevOps Engineering Career Path',
+                    description: 'Bridge development and operations for seamless deployments',
+                    timeline: [
+                        { title: "Learn Fundamentals", duration: "6 Months", 
+                          skills: ["Linux", "Networking", "Scripting"], 
+                          resources: ["Linux Foundation Courses", "Shell Scripting Guide"] },
+                        { title: "CI/CD Mastery", duration: "1 Year", 
+                          skills: ["Docker", "Jenkins", "GitOps"], 
+                          resources: ["Kubernetes Docs", "Cloud Provider Certifications"] },
+                        { title: "Cloud & Monitoring", duration: "1.5 Years", 
+                          skills: ["AWS/GCP", "Terraform", "Prometheus"], 
+                          resources: ["Cloud Guru", "Infrastructure as Code Patterns"] }
+                    ],
+                    skills: [
+                        { name: "Docker", level: 85 },
+                        { name: "Kubernetes", level: 80 },
+                        { name: "AWS", level: 75 },
+                        { name: "Terraform", level: 70 }
+                    ]
+                },
+                'data engineer': {
+                    title: 'Data Engineering Career Path',
+                    description: 'Build robust data pipelines and infrastructure',
+                    timeline: [
+                        { title: "Data Fundamentals", duration: "6 Months", 
+                          skills: ["SQL", "Python", "Data Modeling"], 
+                          resources: ["DataCamp", "Kimball Group Materials"] },
+                        { title: "ETL Processes", duration: "1 Year", 
+                          skills: ["Spark", "Airflow", "Data Warehousing"], 
+                          resources: ["Apache Docs", "ETL Best Practices"] },
+                        { title: "Big Data Systems", duration: "1.5 Years", 
+                          skills: ["Hadoop", "Kafka", "Cloud Data Tools"], 
+                          resources: ["Big Data Specialization", "Cloud Platform Docs"] }
+                    ],
+                    skills: [
+                        { name: "SQL", level: 95 },
+                        { name: "Spark", level: 85 },
+                        { name: "Data Modeling", level: 80 },
+                        { name: "Cloud Data Tools", level: 75 }
+                    ]
+                },
+                'machine learning engineer': {
+                    title: 'ML Engineering Career Path',
+                    description: 'Deploy and scale machine learning models',
+                    timeline: [
+                        { title: "ML Fundamentals", duration: "6 Months", 
+                          skills: ["Python", "Scikit-learn", "Statistics"], 
+                          resources: ["Coursera ML", "Fast.ai"] },
+                        { title: "Model Deployment", duration: "1 Year", 
+                          skills: ["TensorFlow", "ML Pipelines", "APIs"], 
+                          resources: ["MLOps Course", "Cloud AI Platforms"] },
+                        { title: "Production Systems", duration: "1.5 Years", 
+                          skills: ["Model Monitoring", "Distributed Systems", "Optimization"], 
+                          resources: ["Kubeflow Docs", "Model Serving Patterns"] }
+                    ],
+                    skills: [
+                        { name: "Python", level: 90 },
+                        { name: "TensorFlow", level: 85 },
+                        { name: "MLOps", level: 80 },
+                        { name: "Cloud ML", level: 75 }
+                    ]
+                },
+                'qa automation engineer': {
+                    title: 'QA Automation Career Path',
+                    description: 'Ensure software quality through automated testing',
+                    timeline: [
+                        { title: "Testing Basics", duration: "6 Months", 
+                          skills: ["Test Cases", "Manual Testing", "Bug Tracking"], 
+                          resources: ["ISTQB Certification", "Jira Guide"] },
+                        { title: "Automation Tools", duration: "1 Year", 
+                          skills: ["Selenium", "Cypress", "Test Frameworks"], 
+                          resources: ["Test Automation University", "BDD Guides"] },
+                        { title: "CI/CD Integration", duration: "1.5 Years", 
+                          skills: ["Pipeline Testing", "Load Testing", "Security Testing"], 
+                          resources: ["Jenkins Docs", "Performance Testing Tools"] }
+                    ],
+                    skills: [
+                        { name: "Selenium", level: 85 },
+                        { name: "Test Frameworks", level: 80 },
+                        { name: "CI/CD", level: 75 },
+                        { name: "Performance Testing", level: 70 }
+                    ]
+                },
+                'business intelligence analyst': {
+                    title: 'BI Analytics Career Path',
+                    description: 'Transform data into actionable business insights',
+                    timeline: [
+                        { title: "Data Visualization", duration: "6 Months", 
+                          skills: ["Tableau", "Power BI", "Dashboard Design"], 
+                          resources: ["Tableau Public", "Storytelling with Data"] },
+                        { title: "BI Tools Mastery", duration: "1 Year", 
+                          skills: ["SQL", "OLAP", "Data Modeling"], 
+                          resources: ["Data Warehouse Toolkit", "SQLZoo"] },
+                        { title: "Advanced Analytics", duration: "1.5 Years", 
+                          skills: ["Predictive Analytics", "KPI Design", "Data Governance"], 
+                          resources: ["BI Best Practices", "Data Governance Framework"] }
+                    ],
+                    skills: [
+                        { name: "Tableau", level: 90 },
+                        { name: "SQL", level: 85 },
+                        { name: "Data Modeling", level: 80 },
+                        { name: "Dashboard Design", level: 75 }
+                    ]
+                },
+                'software engineer': {
+                title: 'Software Engineering Career Path',
+                description: 'Become a full-stack developer in 3 years',
+                timeline: [
+                    { title: "Learn Fundamentals", duration: "6 Months", 
+                      skills: ["JavaScript", "HTML/CSS", "Basic Algorithms"], 
+                      resources: ["CS50", "FreeCodeCamp"] },
+                    { title: "Frontend Mastery", duration: "1 Year", 
+                      skills: ["React", "State Management", "UI/UX"], 
+                      resources: ["Frontend Masters", "Design Systems"] },
+                    { title: "Backend Development", duration: "1.5 Years", 
+                      skills: ["Node.js", "Databases", "APIs"], 
+                      resources: ["Node School", "PostgreSQL Docs"] }
+                ],
+                skills: [
+                    { name: "JavaScript", level: 90 },
+                    { name: "System Design", level: 75 },
+                    { name: "Testing", level: 80 },
+                    { name: "DevOps", level: 65 }
+                ]
+            },
+                
+    
+            
+            'data scientist': {
+                title: 'Data Science Career Path',
+                description: 'Master data analysis and machine learning',
+                timeline: [
+                    { title: "Python Basics", duration: "3 Months", 
+                      skills: ["Python", "Pandas", "NumPy"], 
+                      resources: ["Python Crash Course"] },
+                    { title: "Data Analysis", duration: "9 Months", 
+                      skills: ["SQL", "Visualization", "Statistics"], 
+                      resources: ["Kaggle Courses"] },
+                    { title: "Machine Learning", duration: "1 Year", 
+                      skills: ["TensorFlow", "Deep Learning", "MLOps"], 
+                      resources: ["Fast.ai", "Coursera"] }
+                ],
+                skills: [
+                    { name: "Python", level: 95 },
+                    { name: "Statistics", level: 85 },
+                    { name: "ML Algorithms", level: 80 },
+                    { name: "Data Visualization", level: 75 }
+                ]
+            }
+        };
+
+        class CareerOrbital {
+            constructor(container) {
+                this.container = container;
+                this.scene = new THREE.Scene();
+                this.camera = new THREE.PerspectiveCamera(75, container.offsetWidth/container.offsetHeight, 0.1, 1000);
+                this.renderer = new THREE.WebGLRenderer({ alpha: true });
+                this.renderer.setSize(container.offsetWidth, container.offsetHeight);
+                container.appendChild(this.renderer.domElement);
+                this.camera.position.z = 500;
+                this.animate();
+            }
+
+            createNodes(data) {
+                this.scene.children = [];
+                const light = new THREE.AmbientLight(0x10b981, 0.5);
+                this.scene.add(light);
+                
+                data.forEach((stage, index) => {
+                    const geometry = new THREE.SphereGeometry(20, 32, 32);
+                    const material = new THREE.MeshPhongMaterial({ color: 0x10b981, transparent: true, opacity: 0.8 });
+                    const sphere = new THREE.Mesh(geometry, material);
+                    sphere.position.x = Math.cos((index/data.length) * Math.PI * 2) * 200;
+                    sphere.position.y = Math.sin((index/data.length) * Math.PI * 2) * 200;
+                    this.scene.add(sphere);
+                });
+            }
+
+            animate() {
+                requestAnimationFrame(() => this.animate());
+                this.scene.children.forEach((obj, index) => {
+                    if (obj.type === 'Mesh') {
+                        obj.rotation.x += 0.01;
+                        obj.rotation.y += 0.01;
+                    }
+                });
+                this.renderer.render(this.scene, this.camera);
+            }
+        }
+
+        let orbitalSystem = new CareerOrbital(document.getElementById('orbitalContainer'));
+
+        document.getElementById('careerForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const career = document.getElementById('careerInput').value.toLowerCase();
+            gsap.to('#careerInput', { backgroundColor: 'rgba(16, 185, 129, 0.1)', duration: 0.3 });
+            
+            setTimeout(() => {
+                if (careerDatabase[career]) {
+                    updateCareerPath(careerDatabase[career]);
+                    gsap.from('.roadmap-3d', { y: 100, opacity: 0, duration: 1 });
+                }
+                gsap.to('#careerInput', { backgroundColor: 'rgba(255, 255, 255, 0.1)', duration: 0.3 });
+            }, 500);
+        });
+
+        function updateCareerPath(data) {
+            document.getElementById('careerTitle').textContent = data.title;
+            document.getElementById('careerDescription').textContent = data.description;
+            orbitalSystem.createNodes(data.timeline);
+            
+            const timelineContainer = document.querySelector('.timeline-flow');
+            timelineContainer.innerHTML = data.timeline.map((stage, index) => `
+                <div class="timeline-node p-6 rounded-xl relative">
+                    <div class="glow-effect">
+                        <h3 class="text-xl font-bold text-white">${stage.title}</h3>
+                        <p class="text-emerald-400 text-sm mb-2">${stage.duration}</p>
+                        <div class="skills-list text-white opacity-80">
+                            ${stage.skills.map(skill => `<span class="skill-tag">${skill}</span>`).join(' ')}
+                        </div>
+                    </div>
+                    ${index < data.timeline.length - 1 ? '<div class="node-connector mx-auto mt-4"></div>' : ''}
+                </div>
+            `).join('');
+
+            const skillsGrid = document.getElementById('skills-grid');
+            skillsGrid.innerHTML = data.skills.map(skill => `
+                <div class="skill-card timeline-node p-4 rounded-lg text-center">
+                    <div class="glow-effect">
+                        <h4 class="text-lg font-bold text-white">${skill.name}</h4>
+                        <div class="w-full bg-gray-800 rounded-full h-2 my-2">
+                            <div class="bg-emerald-500 h-2 rounded-full" style="width: ${skill.level}%"></div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        document.getElementById('careerInput').addEventListener('input', (e) => {
+            const suggestions = Object.keys(careerDatabase).filter(career => 
+                career.includes(e.target.value.toLowerCase()));
+            document.getElementById('suggestions').innerHTML = suggestions.map(career => `
+                <div class="suggestion-item p-3 hover:bg-white/10 rounded-lg cursor-pointer">
+                    ${career.charAt(0).toUpperCase() + career.slice(1)}
+                </div>
+            `).join('');
+            document.getElementById('suggestions').style.opacity = suggestions.length ? 1 : 0;
+        });
+
+        document.getElementById('suggestions').addEventListener('click', (e) => {
+            if (e.target.classList.contains('suggestion-item')) {
+                document.getElementById('careerInput').value = e.target.textContent;
+                document.getElementById('careerForm').dispatchEvent(new Event('submit'));
+            }
+        });
+
+        // Initialize 3D background
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.getElementById('roadmap-bg-animation').appendChild(renderer.domElement);
+
+        const geometry = new THREE.BufferGeometry();
+        const vertices = [];
+        for (let i = 0; i < 5000; i++) {
+            vertices.push(
+                Math.random() * 2000 - 1000,
+                Math.random() * 2000 - 1000,
+                Math.random() * 2000 - 1000
+            );
+        }
+        geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+        
+        const material = new THREE.PointsMaterial({
+            size: 2,
+            color: 0x10b981,
+            transparent: true,
+            opacity: 0.5
+        });
+        
+        const particles = new THREE.Points(geometry, material);
+        scene.add(particles);
+        camera.position.z = 1000;
+
+        function animate() {
+            requestAnimationFrame(animate);
+            particles.rotation.x += 0.0001;
+            particles.rotation.y += 0.0001;
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareerCompass - Career Advisor Chat</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-gradient-to-br from-indigo-900 via-purple-800 to-pink-700 min-h-screen">
+    <!-- 3D Background Animation -->
+    <div id="background-animation" class="fixed top-0 left-0 w-full h-full z-0"></div>
+
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg border-b border-white border-opacity-20">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center">
+                <a href="index.html" class="text-white text-2xl font-bold flex items-center">
+                    <i class="fas fa-compass mr-2 text-emerald-400"></i>
+                    <span>Virtual Career Advisor</span>
+                </a>
+            </div>
+            <nav class="hidden md:flex">
+                <ul class="flex space-x-8">
+                    <li><a href="index.html" class="text-white hover:text-emerald-400 transition-colors">Home</a></li>
+                    <li><a href="index.html#features" class="text-white hover:text-emerald-400 transition-colors">Features</a></li>
+                    <li><a href="index.html#career-quiz" class="text-white hover:text-emerald-400 transition-colors">Career Quiz</a></li>
+                    <li><a href="index.html#about" class="text-white hover:text-emerald-400 transition-colors">About</a></li>
+                </ul>
+            </nav>
+            <button class="md:hidden text-white text-xl">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8 relative z-10">
+        <section class="py-16">
+            <div class="bg-white bg-opacity-10 backdrop-filter backdrop-blur-md rounded-2xl p-8 md:p-12 shadow-xl border border-white border-opacity-20">
+                <h2 class="text-3xl font-bold text-white mb-8">AI Career Advisor Chat</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="feature-content">
+                        <h3 class="text-2xl font-bold text-emerald-400 mb-4">24/7 Career Guidance</h3>
+                        <p class="text-white opacity-80 mb-6">
+                            Get instant access to AI-powered career counseling anytime, anywhere. Our virtual advisor helps with:
+                        </p>
+                        
+                        <div class="assessment-steps">
+                            <div class="assessment-step">
+                                <h4 class="text-lg font-bold text-white mb-2">Career Path Recommendations</h4>
+                                <p class="text-white opacity-80">Personalized suggestions based on your skills and interests</p>
+                            </div>
+                            
+                            <div class="assessment-step">
+                                <h4 class="text-lg font-bold text-white mb-2">Interview Preparation</h4>
+                                <p class="text-white opacity-80">Practice common questions and get feedback</p>
+                            </div>
+                            
+                            <div class="assessment-step">
+                                <h4 class="text-lg font-bold text-white mb-2">Job Search Strategies</h4>
+                                <p class="text-white opacity-80">Optimize your job hunt with smart techniques</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Chat Interface -->
+                    <div class="chat-container bg-white bg-opacity-10 rounded-xl p-6 h-[500px] flex flex-col">
+                        <div class="chat-messages space-y-4 flex-1 overflow-y-auto pb-4">
+                            <!-- Initial Bot Message -->
+                            <div class="bot-message">
+                                <div class="flex items-start gap-3">
+                                    <div class="chat-avatar bg-emerald-500 p-2 rounded-full">
+                                        <i class="fas fa-robot text-white text-lg"></i>
+                                    </div>
+                                    <div class="chat-bubble bg-white bg-opacity-10 backdrop-blur-sm rounded-lg p-4 max-w-[80%]">
+                                        <p class="text-white">Hello! I'm your AI Career Advisor. How can I help you today?</p>
+                                        <span class="text-xs text-emerald-400 mt-1 block">Just now</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Typing Indicator -->
+                        <div class="typing-indicator hidden mt-4">
+                            <div class="flex items-center gap-2 text-emerald-400">
+                                <div class="dot animate-bounce"></div>
+                                <div class="dot animate-bounce delay-100"></div>
+                                <div class="dot animate-bounce delay-200"></div>
+                            </div>
+                        </div>
+
+                        <!-- Chat Input -->
+                        <div class="chat-input mt-4 flex gap-2">
+                            <button id="close-chat-btn" class="absolute top-2 right-2 text-white">
+                                <i class="fas fa-times"></i> <!-- Font Awesome close icon -->
+                            </button>
+
+                            <input type="text" 
+                                   id="chat-input"
+                                   class="w-full bg-white bg-opacity-20 rounded-full px-4 py-2 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-emerald-400" 
+                                   placeholder="Type your question here..."
+                                   autocomplete="off">
+                            <button id="send-btn" class="bg-emerald-500 hover:bg-emerald-600 text-white rounded-full px-6 py-2 transition-colors flex items-center">
+                                <i class="fas fa-paper-plane mr-2"></i>Send
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-12 text-center">
+                    <a href="index.html" class="btn-secondary">
+                        Back to Home
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-8 bg-black bg-opacity-30 backdrop-filter backdrop-blur-md relative z-10">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <div class="text-white text-xl font-bold flex items-center">
+                        <i class="fas fa-compass mr-2 text-emerald-400"></i>
+                        <span>CareerCompass</span>
+                    </div>
+                    <p class="text-white opacity-60 mt-2">Your guide to career success</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-white hover:text-emerald-400 transition-colors">
+                        <i class="fab fa-twitter text-xl"></i>
+                    </a>
+                    <a href="#" class="text-white hover:text-emerald-400 transition-colors">
+                        <i class="fab fa-linkedin text-xl"></i>
+                    </a>
+                    <a href="#" class="text-white hover:text-emerald-400 transition-colors">
+                        <i class="fab fa-instagram text-xl"></i>
+                    </a>
+                    <a href="#" class="text-white hover:text-emerald-400 transition-colors">
+                        <i class="fab fa-facebook text-xl"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-white border-opacity-20 text-center">
+                <p class="text-white opacity-60">&copy; 2025 CareerCompass. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="main.js"></script>
+    <script src="quiz.js"></script>
+    <script src ="chatbot.js" ></script>
+    
+    <!-- Chat Functionality -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const chatInput = document.getElementById('chat-input');
+            const sendBtn = document.getElementById('send-btn');
+            const chatMessages = document.querySelector('.chat-messages');
+            const typingIndicator = document.querySelector('.typing-indicator');
+
+            // Simple Q&A knowledge base
+            const careerKnowledge = {
+                'career path': `Based on current trends, here are top career paths:
+                - AI/Machine Learning Engineer ($150k+)
+                - Cybersecurity Specialist ($140k+)
+                - Cloud Architect ($160k+)
+                Which field interests you most?`,
+
+                'resume': `Resume tips:
+                1. Use action verbs: "Developed", "Optimized", "Managed"
+                2. Quantify achievements: "Increased efficiency by 40%"
+                3. Keep it 1-2 pages max
+                4. Use ATS-friendly fonts like Arial or Calibri`,
+
+                'interview': `Common interview questions to practice:
+                • "Tell me about yourself"
+                • "What's your greatest weakness?"
+                • "Why should we hire you?"
+                • "Where do you see yourself in 5 years?"`,
+
+                'default': `I can help with:
+                - Career path recommendations
+                - Resume optimization
+                - Interview preparation
+                - Salary negotiations
+                What would you like to discuss?`
+            };
+
+            // Add message to chat
+            function addMessage(message, isUser = false) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'} fade-in`;
+                
+                const timestamp = new Date().toLocaleTimeString([], { 
+                    hour: '2-digit', 
+                    minute: '2-digit'
+                });
+
+                messageDiv.innerHTML = `
+                    <div class="flex items-start gap-3 ${isUser ? 'flex-row-reverse' : ''}">
+                        <div class="chat-avatar bg-emerald-500 p-2 rounded-full">
+                            <i class="fas ${isUser ? 'fa-user' : 'fa-robot'} text-white text-lg"></i>
+                        </div>
+                        <div class="chat-bubble bg-white bg-opacity-10 backdrop-blur-sm rounded-lg p-4 max-w-[80%]">
+                            <p class="text-white">${message}</p>
+                            <span class="text-xs text-emerald-400 mt-1 block">${timestamp}</span>
+                        </div>
+                    </div>
+                `;
+
+                chatMessages.appendChild(messageDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            // Generate bot response
+            function getBotResponse(question) {
+                const lowerQuestion = question.toLowerCase();
+                for(const [key, response] of Object.entries(careerKnowledge)) {
+                    if(lowerQuestion.includes(key)) return response;
+                }
+                return careerKnowledge.default;
+            }
+
+            // Handle message sending
+            function handleSendMessage() {
+                const message = chatInput.value.trim();
+                if(!message) return;
+
+                // Add user message
+                addMessage(message, true);
+                chatInput.value = '';
+
+                // Show typing indicator
+                typingIndicator.classList.remove('hidden');
+
+                // Simulate bot response delay
+                setTimeout(() => {
+                    typingIndicator.classList.add('hidden');
+                    const response = getBotResponse(message);
+                    addMessage(response, false);
+                }, 1500);
+            }
+
+            // Event listeners
+            sendBtn.addEventListener('click', handleSendMessage);
+            chatInput.addEventListener('keypress', (e) => {
+                if(e.key === 'Enter') handleSendMessage();
+            });
+
+            // Initial bot message
+            setTimeout(() => {
+                addMessage(careerKnowledge.default, false);
+            }, 500);
+        });
+    </script>
+</body>
+</html>

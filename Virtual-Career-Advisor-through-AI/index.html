@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareerCompass - Your Career Advisor</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-gradient-to-br from-indigo-900 via-purple-800 to-pink-700 min-h-screen">
+    <!-- 3D Background Animation -->
+    <div id="background-animation" class="fixed top-0 left-0 w-full h-full z-0"></div>
+
+    <header class="sticky top-0 z-50 bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg border-b border-white border-opacity-20">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center">
+                <div class="text-white text-2xl font-bold flex items-center">
+                    <i class="fas fa-compass mr-2 text-emerald-400"></i>
+                    <span>Virtual Career Advisor</span>
+                </div>
+            </div>
+            <nav class="hidden md:flex">
+                <ul class="flex space-x-8">
+                    <li><a href="#home" class="text-white hover:text-emerald-400 transition-colors">Home</a></li>
+                    <li><a href="#features" class="text-white hover:text-emerald-400 transition-colors">Features</a></li>
+                    <li><a href="#career-quiz" class="text-white hover:text-emerald-400 transition-colors">Career Quiz</a></li>
+                    <li><a href="profile.html" class="text-white hover:text-emerald-400 transition-colors">Profile</a></li>
+                    <li><a href="#about" class="text-white hover:text-emerald-400 transition-colors">About</a></li>
+                </ul>
+            </nav>
+            <!-- Added Authentication Section -->
+            <div class="hidden md:flex items-center space-x-4">
+                <span id="userGreeting" class="text-white hidden"></span>
+                <button id="authButton" class="bg-emerald-500 hover:bg-emerald-600 px-4 py-2 rounded-lg transition-colors">
+                    Sign In
+                </button>
+            </div>
+            <button class="md:hidden text-white text-xl">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+   
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8 relative z-10">
+        <!-- Hero Section -->
+        <section id="home" class="py-16 md:py-24">
+            <div class="bg-white bg-opacity-10 backdrop-filter backdrop-blur-md rounded-2xl p-8 md:p-12 shadow-xl border border-white border-opacity-20">
+                <div class="flex flex-col md:flex-row items-center">
+                    <div class="md:w-1/2 mb-8 md:mb-0">
+                        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
+                            Your <span class="text-emerald-400">Career</span> Journey Starts Here
+                        </h1>
+                        <p class="text-lg text-white opacity-80 mb-8">
+                            Discover your perfect career path with AI-powered guidance, personalized advice, and expert insights tailored just for you.
+                        </p>
+                        <div class="flex flex-wrap gap-4">
+                            <a href="#career-quiz" class="btn-primary">
+                                Take Career Assessment
+                            </a>
+                            
+                            </button>
+                        </div>
+                    </div>
+                    <div class="md:w-1/2 flex justify-center">
+                        <div class="orbit-animation">
+                            <div class="orbit-circle"></div>
+                            <div class="orbit-icon icon-1"><i class="fas fa-code"></i></div>
+                            <div class="orbit-icon icon-2"><i class="fas fa-flask"></i></div>
+                            <div class="orbit-icon icon-3"><i class="fas fa-briefcase"></i></div>
+                            <div class="orbit-icon icon-4"><i class="fas fa-paint-brush"></i></div>
+                            <div class="orbit-icon icon-5"><i class="fas fa-stethoscope"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="features" class="py-16">
+            <h2 class="text-3xl font-bold text-white text-center mb-16">How CareerCompass Helps You</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <a href="http://127.0.0.1:5000" class="feature-card hover:no-underline">
+                    <div class="feature-icon"><i class="fas fa-brain"></i></div>
+                    <h3 class="text-xl font-bold text-white mb-4">Career Recommender</h3>
+                    <p class="text-white opacity-80">Our advanced AI analyzes your skills, interests, and personality to suggest ideal career paths.</p>
+                </a>
+                <a href="career-chat.html" class="feature-card hover:no-underline">
+                    <div class="feature-icon"><i class="fas fa-comments"></i></div>
+                    <h3 class="text-xl font-bold text-white mb-4">Career Advisor Chat</h3>
+                    <p class="text-white opacity-80">Get personalized career advice 24/7 from our AI career advisor.</p>
+                </a>
+                <a href="roadmaps.html" class="feature-card hover:no-underline">
+                    <div class="feature-icon"><i class="fas fa-route"></i></div>
+                    <h3 class="text-xl font-bold text-white mb-4">Career Roadmaps</h3>
+                    <p class="text-white opacity-80">Receive step-by-step guidance on how to achieve your career goals.</p>
+                </a>
+                <a href="industry-insights.html" class="feature-card hover:no-underline">
+                    <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+                    <h3 class="text-xl font-bold text-white mb-4">Industry Insights</h3>
+                    <p class="text-white opacity-80">Stay informed about job market trends and growth opportunities.</p>
+                </a>
+                <a href="resume-builder.html" class="feature-card hover:no-underline">
+                    <div class="feature-icon"><i class="fas fa-file-alt"></i></div>
+                    <h3 class="text-xl font-bold text-white mb-4">Resume Optimization</h3>
+                    <p class="text-white opacity-80">Get suggestions to improve your resume.</p>
+                </a>
+                <a href="community.html" class="feature-card hover:no-underline">
+                    <div class="feature-icon"><i class="fas fa-users"></i></div>
+                    <h3 class="text-xl font-bold text-white mb-4">Community Support</h3>
+                    <p class="text-white opacity-80">Connect with professionals in your field.</p>
+                </a>
+            </div>
+        </section>
+
+        <!-- Career Quiz Section -->
+        <section id="career-quiz" class="py-16">
+            <div class="bg-white bg-opacity-10 backdrop-filter backdrop-blur-md rounded-2xl p-8 md:p-12 shadow-xl border border-white border-opacity-20">
+                <div id="quiz-intro">
+                    <h2 class="text-3xl font-bold text-white text-center mb-6">Career Assessment Quiz</h2>
+                    <p class="text-lg text-white opacity-80 text-center mb-8">
+                        Discover your ideal career path by taking our comprehensive assessment. This quiz analyzes your skills, interests, and work preferences to suggest the best career options for you.
+                    </p>
+                    <div class="flex justify-center">
+                        <button id="start-quiz-btn" class="btn-primary">
+                            Start Assessment
+                        </button>
+                    </div>
+                </div>
+
+                <div id="quiz-container" class="hidden">
+                    <div class="quiz-progress-container">
+                        <div class="quiz-progress-bar" id="quiz-progress"></div>
+                    </div>
+                    <div id="question-container" class="mt-8"></div>
+                    <div class="flex justify-between mt-8">
+                        <button id="prev-question-btn" class="btn-secondary opacity-50 cursor-not-allowed" disabled>Previous</button>
+                        <button id="next-question-btn" class="btn-primary">Next</button>
+                    </div>
+                </div>
+
+                <div id="quiz-results" class="hidden">
+                    <h2 class="text-3xl font-bold text-white text-center mb-6">Your Career Profile</h2>
+                    <div class="results-container">
+                        <div id="results-content" class="mb-8"></div>
+                        <div class="careers-matched">
+                            <h3 class="text-xl font-bold text-white mb-4">Top Career Matches</h3>
+                            <div id="career-matches" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+                        </div>
+                    </div>
+                    <div class="flex justify-center mt-8">
+                        <button id="retake-quiz-btn" class="btn-secondary mr-4">Retake Quiz</button>
+                        <button id="chat-about-results-btn" class="btn-primary">Discuss Results with Advisor</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+       <!-- About Section -->
+<section id="about" class="py-16">
+    <div class="bg-white bg-opacity-10 backdrop-filter backdrop-blur-md rounded-2xl p-8 md:p-12 shadow-xl border border-white border-opacity-20">
+        <h2 class="text-3xl font-bold text-white text-center mb-6">About CareerCompass</h2>
+        <p class="text-lg text-white opacity-80 text-center mb-8">
+            CareerCompass is a cutting-edge career advisory platform that combines advanced AI technology with career development expertise to help you find your perfect career path.
+        </p>
+        <div class="flex justify-center">
+            <!-- Updated button to link to about.html -->
+            <a href="about.html" class="btn-primary">
+                Learn More About Us
+            </a>
+        </div>
+    </div>
+</section>
+    </main>
+
+    <!-- Chatbot Interface -->
+    <div id="chatbot" class="hidden">
+        <div class="chatbot-header">
+            <div class="flex items-center">
+                <i class="fas fa-robot text-emerald-400 mr-2"></i>
+                <span class="font-bold">Career Advisor</span>
+            </div>
+            <button id="close-chat-btn" class="text-white hover:text-emerald-400 transition-colors">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div id="chat-messages" class="chatbot-messages"></div>
+        <div class="chatbot-input">
+            <input type="text" id="user-message" placeholder="Ask about career advice...">
+            <button id="send-message-btn">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Chat Launcher -->
+    <div id="chat-launcher" class="fixed bottom-6 right-6 z-50">
+        <button class="bg-emerald-500 hover:bg-emerald-600 transition-colors text-white rounded-full h-16 w-16 flex items-center justify-center shadow-lg">
+            <i class="fas fa-comments text-2xl"></i>
+        </button>
+    </div>
+
+    <!-- Footer -->
+    <footer class="py-8 bg-black bg-opacity-30 backdrop-filter backdrop-blur-md relative z-10">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <div class="text-white text-xl font-bold flex items-center">
+                        <i class="fas fa-compass mr-2 text-emerald-400"></i>
+                        <span>CareerCompass</span>
+                    </div>
+                    <p class="text-white opacity-60 mt-2">Your guide to career success</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-white hover:text-emerald-400 transition-colors">
+                        <i class="fab fa-twitter text-xl"></i>
+                    </a>
+                    <a href="#" class="text-white hover:text-emerald-400 transition-colors">
+                        <i class="fab fa-linkedin text-xl"></i>
+                    </a>
+                    <a href="#" class="text-white hover:text-emerald-400 transition-colors">
+                        <i class="fab fa-instagram text-xl"></i>
+                    </a>
+                    <a href="#" class="text-white hover:text-emerald-400 transition-colors">
+                        <i class="fab fa-facebook text-xl"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-white border-opacity-20 text-center">
+                <p class="text-white opacity-60">&copy; 2025 CareerCompass. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="main.js"></script>
+    <script src="quiz.js"></script>
+    <script src="chatbot.js"></script>
+</body>
+</html>
