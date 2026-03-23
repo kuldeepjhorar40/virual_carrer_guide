@@ -9,7 +9,4 @@ How to Use:
 
 This project is a Team Project:
 Members:
-->Nripen Kumar
-->Rajat Kumar
-->Yashasvi Goyal
-->Amit
+Kuldeep
