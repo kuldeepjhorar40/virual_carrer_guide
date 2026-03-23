@@ -9,7 +9,7 @@ import os
 app = Flask(__name__)
 
 # Load the dataset
-df = pd.read_csv('updated_merged_career_recommendation_dataset.csv')
+df = pd.read_csv(r'C:/Users/kulde/Desktop/projects/resume vca/virual_carrer_guide/Virtual-Career-Advisor-through-AI-main/VCA-Complete/NEW-VCA/updated_merged_career_recommendation_dataset.csv')
 
 # Preprocessing
 label_encoders = {}
